@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="4.0"/>
+  <object class="GtkWindow" id="main_window">
+    <property name="title">GTKmm Example</property>
+    <child>
+      <object class="GtkBox" id="vbox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel" id="label">
+            <property name="label">Hello, GTKmm!</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="button">
+            <property name="label">Click Me</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
