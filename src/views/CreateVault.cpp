@@ -1,7 +1,11 @@
 #include "CreateVault.hpp"
 #include "DirectoryDialog.hpp"
+#include "FileUtils.hpp"
+#include "FolderUtils.hpp"
+#include "VaultModel.hpp"
 #include "gtkmm/centerbox.h"
 #include "gtkmm/enums.h"
+#include "json.hpp"
 #include "utils.hpp"
 #include <iostream>
 
@@ -27,15 +31,26 @@ CreateVault::CreateVault(Gtk::Stack &stack, Gtk::Window &mainWindow)
 }
 
 void CreateVault::onButtonClick() {
-  std::string username = input.getText();
+  std::string vaultName = input.getText();
 
   // Create and show the directory dialog using DirectoryDialog
   auto dialog = Gtk::manage(new DirectoryDialog(
       mainWindow,
-      [this, username](const std::string &path) {
-        saveUserName(username);
-        std::cout << "Directory selected: " << path << std::endl;
-        stack.set_visible_child("main");
+      [this, vaultName](const std::string &path) {
+        std::string folderPath = path + "/" + vaultName;
+        if (FolderUtils::createFolder(path, vaultName)) {
+
+          VaultModel vault(vaultName, folderPath);
+          nlohmann::json vaultJson = vault.toJson();
+
+          if (!FileUtils::saveJsonToFile("../config.json", vaultJson)) {
+            std::cout << "Failed to save vault information." << std::endl;
+          }
+
+          stack.set_visible_child("main");
+        } else {
+          std::cout << "Failed to create folder: " << folderPath << std::endl;
+        }
       },
       [](const std::string &message) {
         std::cout << "Error: " << message << std::endl;

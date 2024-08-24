@@ -23,6 +23,7 @@ public:
   // Signal to notify when the button is clicked
   // sigc::signal<void(const Glib::ustring &)> signalTextChanged;
   void onButtonClick();
+  bool saveVaultInfoToFile(const std::string& filePath, const std::string& vaultName, const std::string& vaultPath);
 
 private:
   Gtk::Box wrapper;
