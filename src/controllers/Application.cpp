@@ -16,7 +16,7 @@ void Application::on_activate() {
   auto stack = Gtk::manage(new Gtk::Stack());
 
   // Create the login and main screens as parts of the stack
-  auto createVaultScreen = Gtk::manage(new CreateVault(*stack));
+  auto createVaultScreen = Gtk::manage(new CreateVault(*stack, *mainWindow));
   auto mainScreen = Gtk::manage(new MainScreen());
 
   stack->add(*createVaultScreen, "createVaultScreen", "Create Vault");
@@ -26,7 +26,7 @@ void Application::on_activate() {
   std::string username = loadUserName();
 
   if (username.empty()) {
-    stack->set_visible_child("login"); // Show login screen
+    stack->set_visible_child("createVaultScreen"); // Show login screen
   } else {
     stack->set_visible_child("main"); // Show main screen
   }

@@ -9,7 +9,7 @@
 
 class CreateVault : public Gtk::CenterBox {
 public:
-  CreateVault(Gtk::Stack &stack);
+  CreateVault(Gtk::Stack &stack, Gtk::Window &mainWindow);
   ~CreateVault() override;
 
   // // Setters and Getters
@@ -29,5 +29,6 @@ private:
   Input input;
   Gtk::Button createVaultBtn;
   Gtk::Stack &stack;
+  Gtk::Window &mainWindow;
   // Signal handlers
 };

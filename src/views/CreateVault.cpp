@@ -1,10 +1,13 @@
 #include "CreateVault.hpp"
+#include "DirectoryDialog.hpp"
 #include "gtkmm/centerbox.h"
 #include "gtkmm/enums.h"
 #include "utils.hpp"
+#include <iostream>
 
-CreateVault::CreateVault(Gtk::Stack &stack)
-    : createVaultBtn("Create Vault"), input(), Gtk::CenterBox(), stack(stack) {
+CreateVault::CreateVault(Gtk::Stack &stack, Gtk::Window &mainWindow)
+    : createVaultBtn("Create Vault"), input(), Gtk::CenterBox(), stack(stack),
+      mainWindow(mainWindow) {
   createVaultBtn.signal_clicked().connect(
       sigc::mem_fun(*this, &CreateVault::onButtonClick));
   input.setText("Enter your vault name");
@@ -25,8 +28,32 @@ CreateVault::CreateVault(Gtk::Stack &stack)
 
 void CreateVault::onButtonClick() {
   std::string username = input.getText();
-  saveUserName(username);
-  stack.set_visible_child("main");
+
+  // Create and show the directory dialog
+  auto dialog = Gtk::manage(new DirectoryDialog(mainWindow));
+  //
+
+  dialog->signal_response().connect([this, dialog, username](int response_id) {
+    if (response_id == Gtk::ResponseType::OK) {
+      auto file = dialog->get_file();
+      if (!file) {
+        // TODO: Show notification
+        std::cout << "No directory selected" << std::endl;
+        dialog->hide();
+        return;
+      }
+      auto path = dialog->get_file()->get_path();
+      saveUserName(username);
+      stack.set_visible_child("main");
+    } else {
+      std::cout << "Dialog was canceled." << std::endl;
+    }
+    dialog->hide();
+  }
+
+  );
+
+  dialog->show();
 }
 
 CreateVault::~CreateVault() {}
