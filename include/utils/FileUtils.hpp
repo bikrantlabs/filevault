@@ -15,4 +15,7 @@ public:
                        const std::string &destinationPath);
   static bool saveJsonToFile(const std::string &filePath,
                              const nlohmann::json &jsonData);
+
+  static bool readJsonFromFile(const std::string &filePath,
+                               nlohmann::json &jsonData);
 };

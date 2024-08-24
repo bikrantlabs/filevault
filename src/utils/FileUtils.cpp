@@ -76,3 +76,26 @@ bool FileUtils::saveJsonToFile(const std::string &filePath,
     return false;
   }
 }
+
+bool FileUtils::readJsonFromFile(const std::string &filePath,
+                                 nlohmann::json &jsonData) {
+  std::ifstream file(filePath);
+  if (file.is_open()) {
+    try {
+      file >> jsonData;
+      file.close();
+      std::cout << "JSON data read successfully from: " << filePath
+                << std::endl;
+      return true;
+    } catch (const std::exception &e) {
+      std::cout << "Failed to parse JSON from file: " << filePath
+                << ". Error: " << e.what() << std::endl;
+      file.close();
+      return false;
+    }
+  } else {
+    std::cout << "Failed to open file: " << filePath << " for reading."
+              << std::endl;
+    return false;
+  }
+}
