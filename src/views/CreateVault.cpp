@@ -1,10 +1,10 @@
 #include "CreateVault.hpp"
 #include "gtkmm/centerbox.h"
 #include "gtkmm/enums.h"
-#include <iostream>
+#include "utils.hpp"
 
-CreateVault::CreateVault()
-    : createVaultBtn("Create Vault"), input(), Gtk::CenterBox() {
+CreateVault::CreateVault(Gtk::Stack &stack)
+    : createVaultBtn("Create Vault"), input(), Gtk::CenterBox(), stack(stack) {
   createVaultBtn.signal_clicked().connect(
       sigc::mem_fun(*this, &CreateVault::onButtonClick));
   input.setText("Enter your vault name");
@@ -24,7 +24,9 @@ CreateVault::CreateVault()
 }
 
 void CreateVault::onButtonClick() {
-  std::cout << "Input: " << input.getText() << std::endl;
+  std::string username = input.getText();
+  saveUserName(username);
+  stack.set_visible_child("main");
 }
 
 CreateVault::~CreateVault() {}
