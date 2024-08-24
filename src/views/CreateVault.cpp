@@ -29,29 +29,17 @@ CreateVault::CreateVault(Gtk::Stack &stack, Gtk::Window &mainWindow)
 void CreateVault::onButtonClick() {
   std::string username = input.getText();
 
-  // Create and show the directory dialog
-  auto dialog = Gtk::manage(new DirectoryDialog(mainWindow));
-  //
-
-  dialog->signal_response().connect([this, dialog, username](int response_id) {
-    if (response_id == Gtk::ResponseType::OK) {
-      auto file = dialog->get_file();
-      if (!file) {
-        // TODO: Show notification
-        std::cout << "No directory selected" << std::endl;
-        dialog->hide();
-        return;
-      }
-      auto path = dialog->get_file()->get_path();
-      saveUserName(username);
-      stack.set_visible_child("main");
-    } else {
-      std::cout << "Dialog was canceled." << std::endl;
-    }
-    dialog->hide();
-  }
-
-  );
+  // Create and show the directory dialog using DirectoryDialog
+  auto dialog = Gtk::manage(new DirectoryDialog(
+      mainWindow,
+      [this, username](const std::string &path) {
+        saveUserName(username);
+        std::cout << "Directory selected: " << path << std::endl;
+        stack.set_visible_child("main");
+      },
+      [](const std::string &message) {
+        std::cout << "Error: " << message << std::endl;
+      }));
 
   dialog->show();
 }
