@@ -7,4 +7,5 @@ public:
 
 protected:
   void on_activate() override;
+  Gtk::Window *parentW;
 };
