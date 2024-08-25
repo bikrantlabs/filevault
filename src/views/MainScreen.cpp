@@ -1,22 +1,27 @@
 #include "MainScreen.hpp"
-#include "sigc++/functors/mem_fun.h"
+#include "RightbarView.hpp"
+#include "SidebarView.hpp"
 #include <gtkmm/box.h>
-#include <iostream>
 
-MainScreen::MainScreen() : showDialog("Show Dialog"), input() {
+MainScreen::MainScreen() : sidebar(), centerBox(), rightbar() {
 
-  input.setText("hello world");
-  input.signalTextChanged.connect(
-      sigc::mem_fun(*this, &MainScreen::onInputTextChange));
-  parent.set_orientation(Gtk::Orientation::VERTICAL);
-  parent.append(input);
-  parent.append(showDialog);
-  parent.set_spacing(10);
-  parent.set_margin(10);
+  parent.set_orientation(Gtk::Orientation::HORIZONTAL);
 
+  // Set Widths
+  sidebar.set_size_request(256, -1); // 20% of the window width for the sidebar
+  centerBox.set_size_request(
+      768, -1); // 60% of the window width for the main content
+  rightbar.set_size_request(256, -1);
+
+  // Only allow centerBox to expand
+  centerBox.set_expand(true);
+
+  // Append views inside parent
+  parent.append(sidebar);
+  parent.append(centerBox);
+  parent.append(rightbar);
+
+  // Append parent itself into mainscreen
   append(parent);
-}
-void MainScreen::onInputTextChange(const Glib::ustring &text) {
-  std::cout << "Input text changed: " << text << std::endl;
 }
 MainScreen::~MainScreen() {}

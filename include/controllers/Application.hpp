@@ -7,5 +7,6 @@ public:
 
 protected:
   void on_activate() override;
+  void loadCss();
   Gtk::Window *parentW;
 };

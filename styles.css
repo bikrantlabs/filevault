@@ -1,0 +1,15 @@
+#main-screen {
+  background-color: yellow;
+}
+
+#sidebar {
+  background-color: red;
+}
+
+#center-view {
+  background-color: green;
+}
+
+#rightbar {
+  background-color: blue;
+}

@@ -1,7 +1,8 @@
 #pragma once
+#include "CenterView.hpp"
+#include "RightbarView.hpp"
+#include "SidebarView.hpp"
 #include "gtkmm/box.h"
-#include "gtkmm/button.h"
-#include "input.hpp"
 #include <gtkmm/window.h>
 
 class MainScreen : public Gtk::Box {
@@ -10,8 +11,15 @@ public:
   ~MainScreen() override;
 
 protected:
-  Gtk::Button showDialog;
+  // Panes
+  Gtk::Paned mainPaned;
+  Gtk::Paned rightPaned;
+
+  // Actual Views
+  CenterView centerBox;
+  SidebarView sidebar;
+  RightbarView rightbar;
+
+  // UI components
   Gtk::Box parent;
-  Input input;
-  void onInputTextChange(const Glib::ustring &text);
 };

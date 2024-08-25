@@ -1,15 +1,16 @@
 #include "Application.hpp"
 #include "CreateVault.hpp"
-#include "FileUtils.hpp"
 #include "MainScreen.hpp"
 #include "VaultModel.hpp"
 #include "gtkmm/box.h"
+#include "gtkmm/cssprovider.h"
 #include "gtkmm/enums.h"
 #include "gtkmm/stack.h"
 #include "json.hpp"
-#include "utils.hpp"
 
-Application::Application() : Gtk::Application("com.example.yourdamapp") {}
+Application::Application() : Gtk::Application("com.example.yourdamapp") {
+  loadCss();
+}
 
 void Application::on_activate() {
   auto mainWindow = Gtk::manage(new Gtk::Window());
@@ -21,6 +22,8 @@ void Application::on_activate() {
   // Create the login and main screens as parts of the stack
   auto createVaultScreen = Gtk::manage(new CreateVault(*stack, *mainWindow));
   auto mainScreen = Gtk::manage(new MainScreen());
+  mainScreen->set_size_request(1280, -1);
+  mainScreen->set_name("main-screen");
 
   stack->add(*createVaultScreen, "createVaultScreen", "Create Vault");
   stack->add(*mainScreen, "main", "Main");
@@ -43,4 +46,18 @@ void Application::on_activate() {
   mainWindow->set_child(*vbox);
   add_window(*mainWindow);
   mainWindow->present();
+}
+void Application::loadCss() {
+  auto cssProvider = Gtk::CssProvider::create();
+  std::string cssPath = "../styles.css";
+  try {
+    cssProvider->load_from_path(cssPath);
+  } catch (const Gtk::CssParserError &ex) {
+    throw std::runtime_error("Failed to load CSS: " + cssPath + "\n" +
+                             ex.what());
+  }
+
+  Gtk::StyleProvider::add_provider_for_display(
+      Gdk::Display::get_default(), cssProvider,
+      GTK_STYLE_PROVIDER_PRIORITY_USER);
 }
