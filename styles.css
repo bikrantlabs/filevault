@@ -1,15 +1,24 @@
-#main-screen {
-  background-color: yellow;
-}
-
 #sidebar {
-  background-color: red;
+  padding: 16px;
+  border-right: 1px solid rgb(89, 89, 89);
+  background-color: #404040;
 }
 
 #center-view {
-  background-color: green;
+  background-color: #3B3B3B;
 }
 
 #rightbar {
-  background-color: blue;
+  border-left: 1px solid rgb(89, 89, 89);
+  background-color: #404040;
+}
+
+#icon-btn {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+}
+
+#icon-btn:hover {
+  background-color: rgb(104, 104, 104);
 }
