@@ -12,7 +12,6 @@ CreateVault::CreateVault(Gtk::Stack &stack)
   wrapper.set_spacing(10);
   wrapper.append(input);
   wrapper.append(createVaultBtn);
-
   // Make CreateVault Box take entire width/height of the screen
   set_vexpand(true);
   set_hexpand(true);

@@ -15,6 +15,7 @@ public:
   bool isEditable() const;
   void setVisible(bool visible);
   bool isVisible() const;
+  Gtk::Entry &getEntry(); // Add this getter
 
   // Signal to notify when the text changes
   sigc::signal<void(const Glib::ustring &)> signalTextChanged;

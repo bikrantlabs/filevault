@@ -1,9 +1,11 @@
 #include "Application.hpp"
 #include "CreateVault.hpp"
 #include "MainScreen.hpp"
+#include "VaultModel.hpp"
 #include "gtkmm/box.h"
 #include "gtkmm/enums.h"
 #include "gtkmm/stack.h"
+#include "json.hpp"
 #include "utils.hpp"
 
 Application::Application() : Gtk::Application("com.example.yourdamapp") {}
@@ -23,10 +25,12 @@ void Application::on_activate() {
   stack->add(*mainScreen, "main", "Main");
 
   // Check user login status
-  std::string username = loadUserName();
+  nlohmann::json jsonData;
 
-  if (username.empty()) {
-    stack->set_visible_child("login"); // Show login screen
+  VaultModel vault("../config.json");
+
+  if (vault.getName().empty()) {
+    stack->set_visible_child("createVaultScreen"); // Show login screen
   } else {
     stack->set_visible_child("main"); // Show main screen
   }

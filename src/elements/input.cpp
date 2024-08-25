@@ -12,6 +12,8 @@ void Input::setText(const Glib::ustring &text) { m_Entry.set_text(text); }
 
 Glib::ustring Input::getText() const { return m_Entry.get_text(); }
 
+Gtk::Entry &Input::getEntry() { return m_Entry; }
+
 void Input::setEditable(bool editable) { m_Entry.set_editable(editable); }
 
 bool Input::isEditable() const { return m_Entry.get_editable(); }
