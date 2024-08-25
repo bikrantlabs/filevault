@@ -6,7 +6,8 @@
 #include "gtkmm/box.h"
 #include "gtkmm/enums.h"
 #include "gtkmm/stack.h"
-#include <iostream>
+#include "json.hpp"
+#include "utils.hpp"
 
 Application::Application() : Gtk::Application("com.example.yourdamapp") {}
 
@@ -26,16 +27,10 @@ void Application::on_activate() {
 
   // Check user login status
   nlohmann::json jsonData;
-  std::string vaultName;
-  std::string vaultPath;
-  if (FileUtils::readJsonFromFile("../config.json", jsonData)) {
 
-    VaultModel vault = VaultModel::fromJson(jsonData);
-    vaultName = vault.getName();
-    vaultPath = vault.getPath();
-    std::cout << vaultName << vaultPath;
-  }
-  if (vaultName.empty()) {
+  VaultModel vault("../config.json");
+
+  if (vault.getName().empty()) {
     stack->set_visible_child("createVaultScreen"); // Show login screen
   } else {
     stack->set_visible_child("main"); // Show main screen
