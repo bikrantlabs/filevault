@@ -1,4 +1,6 @@
 #include "FileUtils.hpp"
+#include "VaultModel.hpp"
+#include "constants.hpp"
 #include <cstdio>
 #include <fstream>
 #include <iostream>

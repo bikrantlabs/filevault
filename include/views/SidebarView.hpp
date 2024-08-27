@@ -2,7 +2,9 @@
 
 #include "gtkmm/grid.h"
 #include "icon_button.hpp"
+#include "input.hpp"
 #include <gtkmm.h>
+#include <string>
 
 class SidebarView : public Gtk::Box {
 public:
@@ -12,5 +14,9 @@ public:
 private:
   // Additional UI elements for the sidebar can be added here
   Gtk::Grid primaryActionButtonGrid;
+  Input categoryInput;
   IconButton addCategoryBtn;
+
+  void onEnterPressed(const Glib::ustring &);
+  void onTextChange(const Glib::ustring &);
 };

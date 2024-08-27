@@ -34,6 +34,9 @@ bool moveFolder(const std::string &srcPath, const std::string &destPath);
  */
 bool deleteFolder(const std::string &path);
 
+bool createCategoryFolder(const std::string &categoryName);
+bool isReservedFolderName(const std::string &folderName);
+bool checkFolderExists(const std::string &folderPath);
 } // namespace FolderUtils
 
 #endif // FOLDER_UTILS_HPP

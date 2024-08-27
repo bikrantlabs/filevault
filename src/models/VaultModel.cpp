@@ -35,7 +35,7 @@ void VaultModel::loadFromFile(const std::string &filePath) {
 VaultModel VaultModel::fromJson(const nlohmann::json &j) {
   VaultModel vault;
   vault.name = j.at("vaultName").get<std::string>();
-  vault.path = j.at("vaultName").get<std::string>();
+  vault.path = j.at("vaultPath").get<std::string>();
   return vault;
 }
 VaultModel::~VaultModel() {}

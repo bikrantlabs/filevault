@@ -7,6 +7,7 @@
 #include "gtkmm/enums.h"
 #include "gtkmm/stack.h"
 #include "json.hpp"
+#include <iostream>
 
 Application::Application() : Gtk::Application("com.example.yourdamapp") {
   loadCss();
@@ -28,11 +29,9 @@ void Application::on_activate() {
   stack->add(*createVaultScreen, "createVaultScreen", "Create Vault");
   stack->add(*mainScreen, "main", "Main");
 
-  // Check user login status
-  nlohmann::json jsonData;
-
   VaultModel vault("../config.json");
-
+  std::cout << "Vault Path:===" << vault.getPath() << std::endl;
+  std::cout << "Vault Path:===" << vault.getName() << std::endl;
   if (vault.getName().empty()) {
     stack->set_visible_child("createVaultScreen"); // Show login screen
   } else {

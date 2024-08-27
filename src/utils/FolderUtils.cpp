@@ -1,6 +1,9 @@
 #include "FolderUtils.hpp"
+#include "VaultModel.hpp"
+#include "constants.hpp"
 #include <filesystem>
 #include <iostream>
+#include <stdexcept>
 
 /**
  * We don't need a class for our utils since we won't be making any instances of
@@ -37,5 +40,34 @@ bool deleteFolder(const std::string &path) {
     return false;
   }
 }
+bool checkFolderExists(const std::string &folderPath) {
+  if (std::filesystem::exists(folderPath))
+    return true;
+  return false;
+}
+// TODO: throw error instead of returning
+bool createCategoryFolder(const std::string &categoryName) {
+  VaultModel vault("../config.json");
+  if (vault.getPath().empty()) {
+    throw std::runtime_error("Unable to get vault path.");
+  }
+  if (FolderUtils::isReservedFolderName(categoryName)) {
+    throw std::runtime_error("This name cannot be taken. Enter a new name!");
+  }
+  std::filesystem::path directoryPath = vault.getPath() + "/" + categoryName;
+  if (FolderUtils::checkFolderExists(directoryPath)) {
 
+    throw std::runtime_error("Directory " + directoryPath.string() +
+                             " already exists!");
+  }
+  std::filesystem::create_directory(directoryPath);
+  return true;
+}
+
+bool isReservedFolderName(const std::string &text) {
+  std::string textStr = text;
+  std::transform(textStr.begin(), textStr.end(), textStr.begin(),
+                 ::toupper); // Case insensitive
+  return RESERVED_FILENAMES.find(textStr) != RESERVED_FILENAMES.end();
+}
 } // namespace FolderUtils
