@@ -4,7 +4,7 @@
 #include <string>
 
 typedef struct CategoryMetadata {
-  int id;
+  std::string id;
   std::string name;
   bool passwordLocked;
   std::string password;

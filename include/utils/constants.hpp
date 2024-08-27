@@ -3,6 +3,10 @@
 #include <set>
 #include <string>
 #include <vector>
+
+#define ID_LENGTH 6
+const std::string CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const std::string ROOT_CONFIG_PATH = "../config.json";
 const std::set<std::string> RESERVED_FILENAMES = {
     "CON",  "PRN",  "AUX",  "NUL",  "COM1", "COM2", "COM3", "COM4",
     "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3",

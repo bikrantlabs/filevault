@@ -4,6 +4,7 @@
 #include "FolderUtils.hpp"
 #include "VaultModel.hpp"
 #include "input.hpp"
+#include "utils.hpp"
 #include <iostream>
 void onIconButtonClick() { std::cout << "Clicked~"; }
 SidebarView::SidebarView()
@@ -31,7 +32,8 @@ void SidebarView::onEnterPressed(const std::string &text) {
     // Create category metadata.json
 
     // Add created category data to root metadata.json
-    CategoryMetadata categoryMetadata = {1, text, true, "password1234"};
+    std::string uniqueId = Utils::generateId();
+    CategoryMetadata categoryMetadata = {uniqueId, text, true, "password1234"};
     auto categoryModel = CategoryModel(vault.getPath() + "/" + "metadata.json");
     categoryModel.addCategory(categoryMetadata);
     categoryInput.setText("");

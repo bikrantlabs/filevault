@@ -18,10 +18,6 @@ CategoryModel::CategoryModel(const std::string &path) : filePath(path) {
 }
 void CategoryModel::addCategory(CategoryMetadata categoryMetadata) {
 
-  // If file already exists
-  // std::ifstream file(filePath);
-  // Add HERE
-
   nlohmann::json category;
   category["id"] = categoryMetadata.id;
   category["name"] = categoryMetadata.name;

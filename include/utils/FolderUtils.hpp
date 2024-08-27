@@ -1,5 +1,4 @@
-#ifndef FOLDER_UTILS_HPP
-#define FOLDER_UTILS_HPP
+#pragma once
 
 #include <string>
 /**
@@ -38,5 +37,3 @@ bool createCategoryFolder(const std::string &categoryName);
 bool isReservedFolderName(const std::string &folderName);
 bool checkFolderExists(const std::string &folderPath);
 } // namespace FolderUtils
-
-#endif // FOLDER_UTILS_HPP
