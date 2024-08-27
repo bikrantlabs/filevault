@@ -1,5 +1,6 @@
 #include "VaultModel.hpp"
 #include "FileUtils.hpp"
+#include <iostream>
 
 // Constructor
 VaultModel::VaultModel(const std::string &name, const std::string &path)
@@ -25,8 +26,11 @@ nlohmann::json VaultModel::toJson() const {
 
 void VaultModel::loadFromFile(const std::string &filePath) {
   nlohmann::json jsonData;
-  if (FileUtils::readJsonFromFile(filePath, jsonData)) {
+  try {
+    FileUtils::readJsonFromFile(filePath, jsonData);
     *this = fromJson(jsonData); // Deserialize into this object
+  } catch (const std::exception &e) {
+    std::cerr << "🛑[VaultModel.cpp:32] Error : " << e.what() << std::endl;
   }
 }
 

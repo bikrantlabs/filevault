@@ -45,7 +45,6 @@ bool checkFolderExists(const std::string &folderPath) {
     return true;
   return false;
 }
-// TODO: throw error instead of returning
 bool createCategoryFolder(const std::string &categoryName) {
   VaultModel vault("../config.json");
   if (vault.getPath().empty()) {

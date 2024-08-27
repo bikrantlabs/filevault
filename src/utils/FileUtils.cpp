@@ -84,15 +84,16 @@ bool FileUtils::readJsonFromFile(const std::string &filePath,
     try {
       file >> jsonData;
       file.close();
-      std::cout << "JSON data read successfully from: " << filePath
-                << std::endl;
       return true;
     } catch (const std::exception &e) {
-      throw std::runtime_error("Failed to parse json from file: " + filePath);
       file.close();
+      throw std::runtime_error(
+          "An error occurred while reading JSON from file: " + filePath +
+          ". Error: " + e.what());
     }
   } else {
     throw std::runtime_error("Failed to open file: " + filePath +
                              " for reading.");
   }
+  return false;
 }

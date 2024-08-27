@@ -9,16 +9,14 @@
 #include <iostream>
 
 CreateVault::CreateVault(Gtk::Stack &stack, Gtk::Window &mainWindow)
-    : createVaultBtn("Create Vault"), input(), Gtk::CenterBox(), stack(stack),
-      mainWindow(mainWindow) {
+    : input(), Gtk::CenterBox(), stack(stack), mainWindow(mainWindow) {
   input.disableSpecialCharacters();
-  createVaultBtn.signal_clicked().connect(
-      sigc::mem_fun(*this, &CreateVault::onButtonClick));
+  input.signalEnterPressed.connect(
+      sigc::mem_fun(*this, &CreateVault::onEnterPressed));
   input.setText("Enter your vault name");
   wrapper.set_orientation(Gtk::Orientation::VERTICAL);
   wrapper.set_spacing(10);
   wrapper.append(input);
-  wrapper.append(createVaultBtn);
   // Make CreateVault Box take entire width/height of the screen
   set_vexpand(true);
   set_hexpand(true);
@@ -30,33 +28,28 @@ CreateVault::CreateVault(Gtk::Stack &stack, Gtk::Window &mainWindow)
 }
 
 void CreateVault::onEnterPressed(const Glib::ustring &text) {
-  try {
-    FolderUtils::createCategoryFolder(text);
-  } catch (const std::exception &e) {
-    // TODO: Show error notification
-    std::cerr << "🛑[CreateVault.cpp:38] Error : " << e.what() << std::endl;
-  }
-}
-void CreateVault::onButtonClick() {
   std::string vaultName = input.getText();
-
+  std::cout << "ℹ️[CreateVault.cpp:30] Info : " << "Creating Vault..."
+            << std::endl;
   // Create and show the directory dialog using DirectoryDialog
   auto dialog = Gtk::manage(new DirectoryDialog(
       mainWindow,
       [this, vaultName](const std::string &path) {
         std::string folderPath = path + "/" + vaultName;
-        if (FolderUtils::createFolder(path, vaultName)) {
+        try {
+          // Create Vault Folder
+          FolderUtils::createFolder(path, vaultName);
 
+          // Save vault data to config.json
           VaultModel vault(vaultName, folderPath);
           nlohmann::json vaultJson = vault.toJson();
+          FileUtils::saveJsonToFile("../config.json", vaultJson);
 
-          if (!FileUtils::saveJsonToFile("../config.json", vaultJson)) {
-            std::cout << "Failed to save vault information." << std::endl;
-          }
-
+          // Navigate to main screen
           stack.set_visible_child("main");
-        } else {
-          std::cout << "Failed to create folder: " << folderPath << std::endl;
+        } catch (const std::exception &e) {
+          std::cerr << "🛑[CreateVault.cpp:42] Error : " << e.what()
+                    << std::endl;
         }
       },
       [](const std::string &message) {

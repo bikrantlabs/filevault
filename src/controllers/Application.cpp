@@ -6,7 +6,6 @@
 #include "gtkmm/cssprovider.h"
 #include "gtkmm/enums.h"
 #include "gtkmm/stack.h"
-#include "json.hpp"
 #include <iostream>
 
 Application::Application() : Gtk::Application("com.example.yourdamapp") {
