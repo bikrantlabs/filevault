@@ -12,21 +12,12 @@ public:
   CreateVault(Gtk::Stack &stack, Gtk::Window &mainWindow);
   ~CreateVault() override;
 
-  // // Setters and Getters
-  // void setText(const Glib::ustring &text);
-  // Glib::ustring getText() const;
-  // void setEditable(bool editable);
-  // bool isEditable() const;
-  // void setVisible(bool visible);
-  // bool isVisible() const;
-
-  // Signal to notify when the button is clicked
-  // sigc::signal<void(const Glib::ustring &)> signalTextChanged;
   void onButtonClick();
   bool saveVaultInfoToFile(const std::string &filePath,
                            const std::string &vaultName,
                            const std::string &vaultPath);
   void onEnterPressed(const Glib::ustring &text);
+  // TODO: Implement initialize required metadata.jsons
 
 private:
   Gtk::Box wrapper;

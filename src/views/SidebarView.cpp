@@ -27,8 +27,7 @@ void SidebarView::onEnterPressed(const Glib::ustring &text) {
     FolderUtils::createCategoryFolder(text);
     VaultModel vault("../config.json");
 
-    auto categoryModel =
-        CategoryModel(vault.getPath() + "/" + text + "/" + "metadata.json");
+    auto categoryModel = CategoryModel(vault.getPath() + "/" + "metadata.json");
 
     categoryModel.addCategory({1, "category2", true, "password1234"});
 

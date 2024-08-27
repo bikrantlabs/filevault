@@ -4,7 +4,6 @@
 #include "icon_button.hpp"
 #include "input.hpp"
 #include <gtkmm.h>
-#include <string>
 
 class SidebarView : public Gtk::Box {
 public:

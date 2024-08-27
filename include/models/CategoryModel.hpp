@@ -14,6 +14,7 @@ class CategoryModel {
 public:
   CategoryModel(const std::string &path);
   void addCategory(CategoryMetadata categoryMetadata);
+  CategoryMetadata getCategoryById(int id);
   ~CategoryModel();
 
 private:

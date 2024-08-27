@@ -1,11 +1,10 @@
 #include "FileUtils.hpp"
-#include "VaultModel.hpp"
-#include "constants.hpp"
 #include <cstdio>
 #include <fstream>
 #include <iostream>
 #include <json.hpp>
 #include <sstream>
+#include <stdexcept>
 #include <sys/stat.h>
 
 bool FileUtils::fileExists(const std::string &filePath) {
@@ -73,9 +72,8 @@ bool FileUtils::saveJsonToFile(const std::string &filePath,
     std::cout << "JSON data saved successfully to: " << filePath << std::endl;
     return true;
   } else {
-    std::cout << "Failed to open file: " << filePath << " for writing."
-              << std::endl;
-    return false;
+    throw std::runtime_error("Failed to open file: " + filePath +
+                             " for writing.");
   }
 }
 
@@ -90,14 +88,11 @@ bool FileUtils::readJsonFromFile(const std::string &filePath,
                 << std::endl;
       return true;
     } catch (const std::exception &e) {
-      std::cout << "Failed to parse JSON from file: " << filePath
-                << ". Error: " << e.what() << std::endl;
+      throw std::runtime_error("Failed to parse json from file: " + filePath);
       file.close();
-      return false;
     }
   } else {
-    std::cout << "Failed to open file: " << filePath << " for reading."
-              << std::endl;
-    return false;
+    throw std::runtime_error("Failed to open file: " + filePath +
+                             " for reading.");
   }
 }
