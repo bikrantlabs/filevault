@@ -6,12 +6,12 @@
 #include "gtkmm/centerbox.h"
 #include "gtkmm/enums.h"
 #include "json.hpp"
-#include "utils.hpp"
 #include <iostream>
 
 CreateVault::CreateVault(Gtk::Stack &stack, Gtk::Window &mainWindow)
     : createVaultBtn("Create Vault"), input(), Gtk::CenterBox(), stack(stack),
       mainWindow(mainWindow) {
+  input.disableSpecialCharacters();
   createVaultBtn.signal_clicked().connect(
       sigc::mem_fun(*this, &CreateVault::onButtonClick));
   input.setText("Enter your vault name");
@@ -29,6 +29,14 @@ CreateVault::CreateVault(Gtk::Stack &stack, Gtk::Window &mainWindow)
   set_center_widget(wrapper);
 }
 
+void CreateVault::onEnterPressed(const Glib::ustring &text) {
+  try {
+    FolderUtils::createCategoryFolder(text);
+  } catch (const std::exception &e) {
+    // TODO: Show error notification
+    std::cerr << "🛑[CreateVault.cpp:38] Error : " << e.what() << std::endl;
+  }
+}
 void CreateVault::onButtonClick() {
   std::string vaultName = input.getText();
 

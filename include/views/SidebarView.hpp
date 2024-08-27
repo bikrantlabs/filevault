@@ -18,5 +18,4 @@ private:
   IconButton addCategoryBtn;
 
   void onEnterPressed(const Glib::ustring &);
-  void onTextChange(const Glib::ustring &);
 };

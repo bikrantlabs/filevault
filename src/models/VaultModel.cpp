@@ -4,6 +4,7 @@
 // Constructor
 VaultModel::VaultModel(const std::string &name, const std::string &path)
     : name(name), path(path) {}
+VaultModel::VaultModel(const std::string &filePath) { loadFromFile(filePath); }
 
 // Getters and Setters
 std::string VaultModel::getName() const { return name; }
@@ -21,8 +22,6 @@ nlohmann::json VaultModel::toJson() const {
   j["vaultPath"] = path;
   return j;
 }
-
-VaultModel::VaultModel(const std::string &filePath) { loadFromFile(filePath); }
 
 void VaultModel::loadFromFile(const std::string &filePath) {
   nlohmann::json jsonData;
