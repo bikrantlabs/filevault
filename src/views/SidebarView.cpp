@@ -1,5 +1,6 @@
 #include "SidebarView.hpp"
 #include "CategoryModel.hpp"
+#include "FileUtils.hpp"
 #include "FolderUtils.hpp"
 #include "VaultModel.hpp"
 #include "input.hpp"
@@ -22,15 +23,23 @@ SidebarView::SidebarView()
   set_name("sidebar");
   // Additional initialization code can go here
 }
-void SidebarView::onEnterPressed(const Glib::ustring &text) {
+void SidebarView::onEnterPressed(const std::string &text) {
   try {
     FolderUtils::createCategoryFolder(text);
+
     VaultModel vault("../config.json");
+    // Create category metadata.json
 
+    // Add created category data to root metadata.json
+    CategoryMetadata categoryMetadata = {1, text, true, "password1234"};
     auto categoryModel = CategoryModel(vault.getPath() + "/" + "metadata.json");
+    categoryModel.addCategory(categoryMetadata);
+    categoryInput.setText("");
 
-    categoryModel.addCategory({1, "category2", true, "password1234"});
-
+    // Create an empty metadatsa.json insdie that  category
+    std::filesystem::path _metadata =
+        std::filesystem::path(vault.getPath()) / text / "metadata.json";
+    FileUtils::saveJsonToFile(_metadata, nlohmann::json::object());
   } catch (const std::exception &e) {
     // TODO: Show error notification
     std::cerr << "Error: " << e.what() << std::endl;

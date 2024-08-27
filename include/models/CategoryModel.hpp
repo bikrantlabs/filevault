@@ -12,6 +12,7 @@ typedef struct CategoryMetadata {
 
 class CategoryModel {
 public:
+  CategoryModel();
   CategoryModel(const std::string &path);
   void addCategory(CategoryMetadata categoryMetadata);
   CategoryMetadata getCategoryById(int id);

@@ -1,5 +1,6 @@
 #include "VaultModel.hpp"
 #include "FileUtils.hpp"
+#include "FolderUtils.hpp"
 #include <iostream>
 
 // Constructor
@@ -25,6 +26,8 @@ nlohmann::json VaultModel::toJson() const {
 }
 
 void VaultModel::loadFromFile(const std::string &filePath) {
+  // Check if filePath exists
+
   nlohmann::json jsonData;
   try {
     FileUtils::readJsonFromFile(filePath, jsonData);
@@ -39,6 +42,12 @@ VaultModel VaultModel::fromJson(const nlohmann::json &j) {
   VaultModel vault;
   vault.name = j.at("vaultName").get<std::string>();
   vault.path = j.at("vaultPath").get<std::string>();
+
+  // Optionally if vault.path exists but actually directory doesn't
+  if (!FolderUtils::directoryExists(vault.path)) {
+    // create the dir:
+    FolderUtils::createFolder(vault.path);
+  }
   return vault;
 }
 VaultModel::~VaultModel() {}

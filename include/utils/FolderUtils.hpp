@@ -8,14 +8,14 @@
  */
 namespace FolderUtils {
 
+bool directoryExists(const std::string &dirPath);
 /**
  * Creates a folder at the specified path with the given name.
  *
  * @param path The path where the folder should be created.
- * @param folderName The name of the folder to be created.
  * @return true if the folder was created successfully, false otherwise.
  */
-bool createFolder(const std::string &path, const std::string &folderName);
+bool createFolder(const std::string &path);
 
 /**
  * Moves a folder from source path to destination path.

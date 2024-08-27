@@ -16,5 +16,5 @@ private:
   Input categoryInput;
   IconButton addCategoryBtn;
 
-  void onEnterPressed(const Glib::ustring &);
+  void onEnterPressed(const std::string &);
 };

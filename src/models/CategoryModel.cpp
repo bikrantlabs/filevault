@@ -5,15 +5,23 @@
 #include "CategoryModel.hpp"
 #include "FileUtils.hpp"
 #include "json.hpp"
+#include <fstream>
+#include <iostream>
 #include <string>
+CategoryModel::CategoryModel() {}
 CategoryModel::CategoryModel(const std::string &path) : filePath(path) {
-  // TODO: Save json to file
+
   loadExistingData();
   if (jsonData.find("categories") == jsonData.end()) {
     jsonData["categories"] = nlohmann::json::array();
   }
 }
 void CategoryModel::addCategory(CategoryMetadata categoryMetadata) {
+
+  // If file already exists
+  // std::ifstream file(filePath);
+  // Add HERE
+
   nlohmann::json category;
   category["id"] = categoryMetadata.id;
   category["name"] = categoryMetadata.name;
@@ -25,12 +33,19 @@ void CategoryModel::addCategory(CategoryMetadata categoryMetadata) {
   writeToFile();
 }
 void CategoryModel::loadExistingData() {
-  if (!FileUtils::readJsonFromFile(filePath, jsonData)) {
+  try {
+    FileUtils::readJsonFromFile(filePath, jsonData);
+  } catch (const std::exception &e) {
     jsonData =
         nlohmann::json::object(); // If reading fails, create new empty object.
   }
 };
 void CategoryModel::writeToFile() const {
-  FileUtils::saveJsonToFile(filePath, jsonData);
+  try {
+    FileUtils::saveJsonToFile(filePath, jsonData);
+  } catch (const std::exception &e) {
+    std::cerr << "🛑[CategoryModel.cpp:49] Error : "
+              << "metadata.json not found!" << std::endl;
+  }
 }
 CategoryModel::~CategoryModel() {}
