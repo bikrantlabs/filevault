@@ -1,6 +1,7 @@
 #include "SidebarView.hpp"
-#include "FileUtils.hpp"
+#include "CategoryModel.hpp"
 #include "FolderUtils.hpp"
+#include "VaultModel.hpp"
 #include "input.hpp"
 #include <iostream>
 void onIconButtonClick() { std::cout << "Clicked~"; }
@@ -14,8 +15,6 @@ SidebarView::SidebarView()
   primaryActionButtonGrid.attach(addCategoryBtn, 1, 0, 1, 1);
   categoryInput.signalEnterPressed.connect(
       sigc::mem_fun(*this, &SidebarView::onEnterPressed));
-  categoryInput.signalTextChanged.connect(
-      sigc::mem_fun(*this, &SidebarView::onTextChange));
   primaryActionButtonGrid.set_column_homogeneous(
       false); // Make all columns have the same width
   primaryActionButtonGrid.set_row_homogeneous(
@@ -26,6 +25,13 @@ SidebarView::SidebarView()
 void SidebarView::onEnterPressed(const Glib::ustring &text) {
   try {
     FolderUtils::createCategoryFolder(text);
+    VaultModel vault("../config.json");
+
+    auto categoryModel =
+        CategoryModel(vault.getPath() + "/" + text + "/" + "metadata.json");
+
+    categoryModel.addCategory({1, "category2", true, "password1234"});
+
   } catch (const std::exception &e) {
     // TODO: Show error notification
     std::cerr << "Error: " << e.what() << std::endl;
