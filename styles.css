@@ -22,3 +22,35 @@
 #icon-btn:hover {
   background-color: rgb(104, 104, 104);
 }
+
+#category-btn {
+  background: transparent;
+  color: white;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+
+}
+
+#category-btn:hover {
+  background-color: rgb(104, 104, 104);
+  cursor: pointer;
+}
+
+#label {
+  color: rgb(185, 185, 185);
+}
+
+#btn-number-label {
+  margin-left: auto;
+}
+
+.lock-icon {
+  opacity: 0.5;
+}
+
+/* 
+#category-list {
+  background-color: red;
+
+} */

@@ -16,6 +16,8 @@ MainScreen::MainScreen() : sidebar(), centerBox(), rightbar() {
   // Only allow centerBox to expand
   centerBox.set_expand(true);
 
+  sidebar.set_expand(false);
+  rightbar.set_expand(false);
   // Append views inside parent
   parent.append(sidebar);
   parent.append(centerBox);
