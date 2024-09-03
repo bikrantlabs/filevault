@@ -1,11 +1,15 @@
 #include "sidebar/CategoryListView.hpp"
 #include "CategoryModel.hpp"
+#include "CategoryView.hpp"
 #include "gtkmm/button.h"
 #include "gtkmm/enums.h"
+#include "gtkmm/object.h"
 #include <iostream>
 #include <string>
 
-CategoryListView::CategoryListView() : categoryLabel("Categories") {
+CategoryListView::CategoryListView(CenterView *stack)
+    : categoryLabel("Categories"), stack(stack) {
+  stack->set_visible_child("all-files");
   CategoryModel &categoryModel = CategoryModel::getInstance();
   categoryModel.signalCategoryAdded.connect(
       sigc::mem_fun(*this, &CategoryListView::onCategoryAdded));
@@ -92,6 +96,17 @@ void CategoryListView::refreshCategoryList() {
 
 void CategoryListView::onCategoryButtonClicked(const std::string categoryId) {
   // TODO: Navigate to that category screen
+  // Create or load the category-specific screen in the stack
+  std::string screenName = "category-" + categoryId;
+  if (!stack->get_child_by_name(screenName)) {
+    auto categoryView = Gtk::make_managed<CategoryView>(categoryId);
+    stack->add(*categoryView, screenName, "Category");
+  }
+
+  // Switch to the corresponding category screen
+  stack->set_visible_child(screenName);
+
+  std::cout << "Navigated to category ID: " << categoryId << std::endl;
 }
 
 void CategoryListView::onCategoryAdded() { refreshCategoryList(); }

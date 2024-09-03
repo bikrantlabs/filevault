@@ -1,9 +1,11 @@
 #include "MainScreen.hpp"
 #include "RightbarView.hpp"
 #include "SidebarView.hpp"
+#include "gtkmm/label.h"
 #include <gtkmm/box.h>
 
-MainScreen::MainScreen() : sidebar(), centerBox(), rightbar() {
+MainScreen::MainScreen(CategoryView *categoryView)
+    : sidebar(&centerBox), centerBox(categoryView), rightbar() {
 
   parent.set_orientation(Gtk::Orientation::HORIZONTAL);
 

@@ -1,4 +1,5 @@
 #include "Application.hpp"
+#include "CategoryView.hpp"
 #include "CreateVault.hpp"
 #include "MainScreen.hpp"
 #include "VaultModel.hpp"
@@ -18,10 +19,10 @@ void Application::on_activate() {
   mainWindow->set_default_size(1280, 720);
 
   auto stack = Gtk::manage(new Gtk::Stack());
-
+  auto categoryView = Gtk::make_managed<CategoryView>("all-files");
   // Create the login and main screens as parts of the stack
   auto createVaultScreen = Gtk::manage(new CreateVault(*stack, *mainWindow));
-  auto mainScreen = Gtk::manage(new MainScreen());
+  auto mainScreen = Gtk::manage(new MainScreen(categoryView));
   mainScreen->set_size_request(1280, -1);
   mainScreen->set_name("main-screen");
 
