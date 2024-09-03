@@ -1,16 +1,24 @@
+window {
+  background-color: #3B3B3B;
+  color: whtie;
+}
+
 #sidebar {
   padding: 16px;
   border-right: 1px solid rgb(89, 89, 89);
   background-color: #404040;
+  color: white;
 }
 
 #center-view {
   background-color: #3B3B3B;
+  color: white;
 }
 
 #rightbar {
   border-left: 1px solid rgb(89, 89, 89);
   background-color: #404040;
+  color: white;
 }
 
 #icon-btn {
@@ -48,9 +56,3 @@
 .lock-icon {
   opacity: 0.5;
 }
-
-/* 
-#category-list {
-  background-color: red;
-
-} */

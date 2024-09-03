@@ -1,12 +1,15 @@
 #pragma once
 
+#include "CategoryView.hpp"
+#include "gtkmm/stack.h"
 #include <gtkmm.h>
 
-class CenterView : public Gtk::Box {
+class CenterView : public Gtk::Stack {
 public:
-  CenterView();
+  CenterView(CategoryView *categoryView);
   ~CenterView() override;
 
 private:
+  CategoryView *categoryView;
   // Additional UI elements for the center view can be added here
 };

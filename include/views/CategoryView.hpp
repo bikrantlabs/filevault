@@ -1,15 +1,13 @@
 #pragma once
 
 #include "gtkmm/box.h"
-#include "input.hpp"
+#include "gtkmm/label.h"
 #include <string>
 class CategoryView : public Gtk::Box {
 public:
-  std::string onPressEnter();
+  CategoryView(const std::string categoryId);
 
 private:
-  Gtk::Button createCategory;
-  Gtk::Box parent;
-  Input input;
-  void onInputTextChange(const Glib::ustring &text);
+  std::string categoryId;
+  Gtk::Label categoryViewLabel;
 };

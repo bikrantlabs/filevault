@@ -1,11 +1,13 @@
 #include "SidebarView.hpp"
 #include "CategoryController.hpp"
+#include "CategoryListView.hpp"
+#include "CenterView.hpp"
 #include "input.hpp"
 #include <iostream>
 void onIconButtonClick() { std::cout << "Clicked~"; }
-SidebarView::SidebarView()
+SidebarView::SidebarView(CenterView *stack)
     : addCategoryBtn("../assets/folder-plus.png", onIconButtonClick),
-      categoryInput() {
+      categoryInput(), categoryList(stack) {
   categoryInput.disableSpecialCharacters();
 
   attach(primaryActionButtonGrid, 0, 0, 1, 1);

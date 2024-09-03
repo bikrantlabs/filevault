@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CenterView.hpp"
 #include "gtkmm/button.h"
 #include "gtkmm/grid.h"
 #include "gtkmm/label.h"
@@ -9,11 +10,11 @@
 
 class CategoryListView : public Gtk::Grid {
 public:
-  CategoryListView();
+  CategoryListView(CenterView *stack);
 
 private:
   std::vector<Gtk::Button *> categoryButtons;
-
+  CenterView *stack;
   Gtk::Label categoryLabel;
   Gtk::Grid buttonContainer;
   void onCategoryButtonClicked(const std::string categoryId);

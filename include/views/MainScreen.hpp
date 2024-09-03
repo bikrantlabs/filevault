@@ -7,14 +7,14 @@
 
 class MainScreen : public Gtk::Box {
 public:
-  MainScreen();
+  MainScreen(CategoryView *categoryView);
   ~MainScreen() override;
 
 protected:
   // Panes
   Gtk::Paned mainPaned;
   Gtk::Paned rightPaned;
-
+  CategoryView *categoryView;
   // Actual Views
   CenterView centerBox;
   SidebarView sidebar;
