@@ -10,6 +10,8 @@
 #include <iostream>
 #include <string>
 CategoryModel::CategoryModel() {
+  std::cout << "🟢 [CategoryModel.cpp:13]: " << "CategoryModel Constructed"
+            << std::endl;
   VaultModel vaultModel(ROOT_CONFIG_PATH);
   filePath = vaultModel.getPath() + "/" + "metadata.json";
 
@@ -32,6 +34,7 @@ void CategoryModel::addCategory(CategoryMetadata categoryMetadata) {
               << category.value("name", "") << std::endl;
   }
   writeToFile();
+  signalCategoryAdded.emit();
 }
 
 void CategoryModel::loadExistingData() {

@@ -5,6 +5,7 @@
 #include "VaultModel.hpp"
 #include "constants.hpp"
 #include "utils.hpp"
+#include <filesystem>
 #include <iostream>
 
 CategoryController::CategoryController() {}
@@ -12,6 +13,8 @@ CategoryController::CategoryController() {}
 void CategoryController::onAddCategory(const std::string &categoryName,
                                        const std::string &password) {
   try {
+    CategoryModel &categoryModel = CategoryModel::getInstance();
+
     VaultModel vault(ROOT_CONFIG_PATH);
     FolderUtils::createCategoryFolder(categoryName);
 
@@ -21,7 +24,6 @@ void CategoryController::onAddCategory(const std::string &categoryName,
     std::string uniqueId = Utils::generateId();
     CategoryMetadata categoryMetadata = {uniqueId, categoryName, true,
                                          "password1234"};
-    auto categoryModel = CategoryModel();
     categoryModel.addCategory(categoryMetadata);
 
     // Create an empty metadatsa.json insdie that  category
