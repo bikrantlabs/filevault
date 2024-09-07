@@ -5,9 +5,10 @@
 #include "input.hpp"
 #include <iostream>
 void onIconButtonClick() { std::cout << "Clicked~"; }
-SidebarView::SidebarView(CenterView *stack)
-    : addCategoryBtn("../assets/folder-plus.png", onIconButtonClick),
-      categoryInput(), categoryList(stack) {
+SidebarView::SidebarView(Gtk::Window &parentWindow, CenterView *stack)
+    : parentWindow(parentWindow),
+      addCategoryBtn("../assets/folder-plus.png", onIconButtonClick),
+      categoryInput(), categoryList(parentWindow, stack) {
   categoryInput.disableSpecialCharacters();
 
   attach(primaryActionButtonGrid, 0, 0, 1, 1);

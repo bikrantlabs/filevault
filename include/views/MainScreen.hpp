@@ -7,7 +7,7 @@
 
 class MainScreen : public Gtk::Box {
 public:
-  MainScreen(CategoryView *categoryView);
+  MainScreen(Gtk::Window &parentWindow, CategoryView *categoryView);
   ~MainScreen() override;
 
 protected:
@@ -19,6 +19,9 @@ protected:
   CenterView centerBox;
   SidebarView sidebar;
   RightbarView rightbar;
+
+  // Other views/windows/models passed
+  Gtk::Window &parentWindow;
 
   // UI components
   Gtk::Box parent;

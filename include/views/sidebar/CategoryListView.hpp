@@ -10,9 +10,10 @@
 
 class CategoryListView : public Gtk::Grid {
 public:
-  CategoryListView(CenterView *stack);
+  CategoryListView(Gtk::Window &parentWindow, CenterView *stack);
 
 private:
+  Gtk::Window &parentWindow;
   std::vector<Gtk::Button *> categoryButtons;
   CenterView *stack;
   Gtk::Label categoryLabel;

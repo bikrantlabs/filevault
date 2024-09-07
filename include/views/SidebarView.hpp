@@ -8,12 +8,13 @@
 
 class SidebarView : public Gtk::Grid {
 public:
-  SidebarView(CenterView *stack);
+  SidebarView(Gtk::Window &parentWindow, CenterView *stack);
   ~SidebarView() override;
   // void setStack()
 
 private:
   // Additional UI elements for the sidebar can be added here
+  Gtk::Window &parentWindow;
   Gtk::Grid primaryActionButtonGrid;
   CenterView *stack;
   Input categoryInput;

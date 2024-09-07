@@ -49,10 +49,22 @@ window {
   color: rgb(185, 185, 185);
 }
 
+.muted-label {
+  color: rgb(185, 185, 185);
+}
+
 #btn-number-label {
   margin-left: auto;
 }
 
 .lock-icon {
   opacity: 0.5;
+}
+
+#empty-wrapper-box {
+  border: 3px dotted rgb(104, 104, 104);
+  padding-top: 32px;
+  padding-bottom: 32px;
+  padding-left: 132px;
+  padding-right: 132px;
 }

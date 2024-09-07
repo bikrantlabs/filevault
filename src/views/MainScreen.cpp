@@ -1,14 +1,15 @@
 #include "MainScreen.hpp"
 #include "RightbarView.hpp"
 #include "SidebarView.hpp"
-#include "gtkmm/label.h"
+#include "gtkmm/object.h"
 #include <gtkmm/box.h>
 
-MainScreen::MainScreen(CategoryView *categoryView)
-    : sidebar(&centerBox), centerBox(categoryView), rightbar() {
+MainScreen::MainScreen(Gtk::Window &parentWindow, CategoryView *categoryView)
+    : parentWindow(parentWindow), sidebar(parentWindow, &centerBox),
+      centerBox(parentWindow, categoryView), rightbar() {
 
   parent.set_orientation(Gtk::Orientation::HORIZONTAL);
-
+  auto _categoryView = Gtk::make_managed<CategoryView>(parentWindow, "all");
   // Set Widths
   sidebar.set_size_request(256, -1); // 20% of the window width for the sidebar
   centerBox.set_size_request(
@@ -17,7 +18,6 @@ MainScreen::MainScreen(CategoryView *categoryView)
 
   // Only allow centerBox to expand
   centerBox.set_expand(true);
-
   sidebar.set_expand(false);
   rightbar.set_expand(false);
   // Append views inside parent
@@ -25,6 +25,8 @@ MainScreen::MainScreen(CategoryView *categoryView)
   parent.append(centerBox);
   parent.append(rightbar);
 
+  // Set default screen to all(all-files)
+  centerBox.set_visible_child("all");
   // Append parent itself into mainscreen
   append(parent);
 }

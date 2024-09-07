@@ -7,9 +7,8 @@
 #include <iostream>
 #include <string>
 
-CategoryListView::CategoryListView(CenterView *stack)
-    : categoryLabel("Categories"), stack(stack) {
-  stack->set_visible_child("all-files");
+CategoryListView::CategoryListView(Gtk::Window &parentWindow, CenterView *stack)
+    : parentWindow(parentWindow), categoryLabel("Categories"), stack(stack) {
   CategoryModel &categoryModel = CategoryModel::getInstance();
   categoryModel.signalCategoryAdded.connect(
       sigc::mem_fun(*this, &CategoryListView::onCategoryAdded));
@@ -99,7 +98,8 @@ void CategoryListView::onCategoryButtonClicked(const std::string categoryId) {
   // Create or load the category-specific screen in the stack
   std::string screenName = "category-" + categoryId;
   if (!stack->get_child_by_name(screenName)) {
-    auto categoryView = Gtk::make_managed<CategoryView>(categoryId);
+    auto categoryView =
+        Gtk::make_managed<CategoryView>(parentWindow, categoryId);
     stack->add(*categoryView, screenName, "Category");
   }
 
