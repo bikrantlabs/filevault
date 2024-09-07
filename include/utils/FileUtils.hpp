@@ -1,4 +1,5 @@
 #pragma once
+#include "AssetModel.hpp"
 #include "json.hpp"
 #include <string>
 
@@ -19,5 +20,8 @@ bool saveJsonToFile(const std::string &filePath,
 
 // ============ Read json data from file ============
 bool readJsonFromFile(const std::string &filePath, nlohmann::json &jsonData);
+
+std::vector<AssetModel>
+    convertFilesToAssetModels(std::vector<Glib::RefPtr<Gio::File>>);
 
 }; // namespace FileUtils

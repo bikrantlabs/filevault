@@ -1,5 +1,6 @@
 #pragma once
 
+#include "AssetModel.hpp"
 #include "json.hpp"
 #include "sigc++/signal.h"
 #include <string>
@@ -22,9 +23,13 @@ public:
   }
 
   void addCategory(CategoryMetadata categoryMetadata);
-  CategoryMetadata getCategoryById(int id);
+  CategoryMetadata getCategoryById(std::string id);
   std::vector<CategoryMetadata> getAllCategories();
 
+  //
+  std::vector<AssetModel> getAssetsByCategory(std::string categoryId);
+  bool addAssetsToCategory(std::vector<AssetModel> assets,
+                           std::string categoryId);
   sigc::signal<void()> signalCategoryAdded;
 
 private:

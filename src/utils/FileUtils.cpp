@@ -97,3 +97,20 @@ bool FileUtils::readJsonFromFile(const std::string &filePath,
   }
   return false;
 }
+std::vector<AssetModel> FileUtils::convertFilesToAssetModels(
+    std::vector<Glib::RefPtr<Gio::File>> files) {
+  std::vector<AssetModel> assetModels;
+  for (const auto &file : files) {
+    try {
+      // The default constructor for assetmodel will automatically set the
+      // necessary fields for the model
+      AssetModel asset(file);
+
+      assetModels.push_back(asset);
+    } catch (const Gio::Error &e) {
+      std::cerr << "Error accessing file info: " << e.what() << std::endl;
+    }
+  }
+
+  return assetModels;
+}

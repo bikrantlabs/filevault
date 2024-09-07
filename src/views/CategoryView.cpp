@@ -1,4 +1,6 @@
 #include "CategoryView.hpp"
+#include "CategoryModel.hpp"
+#include "FileUtils.hpp"
 #include "giomm/liststore.h"
 #include "glibmm/ustring.h"
 #include "gtkmm/button.h"
@@ -6,13 +8,26 @@
 #include "gtkmm/filedialog.h"
 #include "gtkmm/image.h"
 #include "gtkmm/label.h"
+#include "utils.hpp"
 #include <iostream>
+#include <vector>
 CategoryView::CategoryView(Gtk::Window &parentWindow,
                            const std::string categoryId)
     : parentWindow(parentWindow), browseFilesButton("Browse Files"),
       categoryViewLabel(categoryId), categoryId(categoryId) {
   set_name("category-view");
 
+  /**
+  TODO: fetch all assets under this categoryId
+
+  auto assets = categoryModel.getAssets(categoryId);
+
+  if(assets.empty()){
+  //  TODO: Show empty state
+  } else {
+    assets[0].
+  }
+   */
   // If not files in the category, render the empty state
   auto lockIcon = Gtk::make_managed<Gtk::Image>("../assets/upload-icon.png");
   lockIcon->set_pixel_size(132);
@@ -79,13 +94,17 @@ void CategoryView::onBrowseFilesFinish(
   // std::vector<Glib::RefPtr<Gio::File>>
 
   try {
+    CategoryModel &categoryModel = CategoryModel::getInstance();
     auto files = dialog->open_multiple_finish(result);
 
     // Notice that this is a std::string, not a Glib::ustring.
-    for (const auto &file : files) {
-      auto filename = file->get_path();
-      std::cout << "File selected: " << filename << std::endl;
-    }
+    auto assets = FileUtils::convertFilesToAssetModels(files);
+    categoryModel.addAssetsToCategory(assets, categoryId);
+    // for (const auto &file : files) {
+    //   auto fileInfo = file->query_info();
+    //   size_t lastDotPos = fileInfo->get_name().find_last_of(".");
+    //   std::cout << "File selected: " << file->get_path() << std::endl;
+    // }
   } catch (const Gtk::DialogError &err) {
     // Can be thrown by dialog->open_finish(result).
     std::cout << "No file selected. " << err.what() << std::endl;

@@ -85,3 +85,44 @@ std::string Utils::generateId() {
 
   return id;
 }
+
+bool Utils::isStringInArray(const std::vector<std::string> &vec,
+                            const std::string &value) {
+  return std::find(vec.begin(), vec.end(), value) != vec.end();
+}
+std::string Utils::formatSize(long long bytes) {
+  if (bytes < 0) {
+    return "Invalid size";
+  }
+
+  const double KB = 1000.0;
+  const double MB = KB * 1000.0;
+  const double GB = MB * 1000.0;
+
+  std::ostringstream oss;
+  double size;
+
+  if (bytes >= GB) {
+    size = bytes / GB;
+    oss << std::fixed << std::setprecision(2) << size << "GB";
+  } else if (bytes >= MB) {
+    size = bytes / MB;
+    oss << std::fixed << std::setprecision(2) << size << "MB";
+  } else if (bytes >= KB) {
+    size = bytes / KB;
+    oss << std::fixed << std::setprecision(2) << size << "KB";
+  } else {
+    size = bytes;
+    oss << size << "B";
+  }
+
+  // Correct rounding by using round function
+  double roundedSize = std::round(size * 100) / 100;
+  std::ostringstream finalOss;
+  finalOss << std::fixed << std::setprecision(2) << roundedSize;
+
+  // Construct final string
+  return finalOss.str() +
+         (bytes >= GB ? "GB"
+                      : (bytes >= MB ? "MB" : (bytes >= KB ? "KB" : "B")));
+}
