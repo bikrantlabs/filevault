@@ -176,12 +176,6 @@ bool CategoryModel::addAssetsToCategory(std::vector<AssetModel> assets,
   if (!assetJsonData.contains("assets")) {
     assetJsonData["assets"] = nlohmann::json::array();
   }
-  // Load existing json data
-  auto metadataPath = destinationPath + "/" + "metadata.json";
-  FileUtils::readJsonFromFile(metadataPath, assetJsonData);
-  if (!assetJsonData.contains("assets")) {
-    assetJsonData["assets"] = nlohmann::json::array();
-  }
   // Process and move files
   for (auto &asset : assets) {
     try {
