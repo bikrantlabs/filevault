@@ -10,7 +10,7 @@ AssetModel::AssetModel(Glib::RefPtr<Gio::File> file) {
   type = determineAssetType(name);
   isTrashed = false;
   createdAt = fileInfo->get_creation_date_time().format("%Y-%m-%d");
-  filepath = file->get_path();
+  filePath = file->get_path();
   // Constructor implementation
 }
 
@@ -57,6 +57,16 @@ bool AssetModel::addAsset(std::string categoryId) {
   bool success = false;
   // Implementation to add a new asset to categoryId
   return success;
+}
+nlohmann::json AssetModel::toJson() {
+  nlohmann::json assetJson = {{"id", id},
+                              {"name", name},
+                              {"size", size},
+                              {"type", type},
+                              {"isTrashed", isTrashed},
+                              {"createdAt", createdAt},
+                              {"filePath", filePath}};
+  return assetJson;
 }
 
 bool AssetModel::updateName(const std::string &name) {

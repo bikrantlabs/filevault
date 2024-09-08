@@ -170,11 +170,17 @@ bool CategoryModel::addAssetsToCategory(std::vector<AssetModel> assets,
       return false;
     }
   }
+  // Load existing json data
+  auto metadataPath = destinationPath + "/" + "metadata.json";
+  FileUtils::readJsonFromFile(metadataPath, assetJsonData);
+  if (!assetJsonData.contains("assets")) {
+    assetJsonData["assets"] = nlohmann::json::array();
+  }
   // Process and move files
   for (auto &asset : assets) {
     try {
       // Create Gio::File instances for source and destination
-      auto sourceFile = Gio::File::create_for_path(asset.filepath);
+      auto sourceFile = Gio::File::create_for_path(asset.filePath);
       auto destinationFile =
           Gio::File::create_for_path(destinationPath + "/" + asset.name);
 
@@ -185,9 +191,12 @@ bool CategoryModel::addAssetsToCategory(std::vector<AssetModel> assets,
       sourceFile->remove();
 
       // Update asset file path
-      asset.filepath = filePath + "/" + asset.name;
+      asset.filePath = destinationPath + "/" + asset.name;
 
-      // TODO: Update metadata.json with new assets
+      // TODO:: Update metadata.json with new assets
+      auto assetJson = asset.toJson();
+      assetJsonData["assets"].push_back(assetJson);
+      FileUtils::saveJsonToFile(metadataPath, assetJsonData);
     } catch (const Glib::Error &e) {
       // Handle error, such as file not found, permission issues, etc.
       std::cerr << "Error moving file: " << e.what() << std::endl;

@@ -43,4 +43,5 @@ private:
   void loadExistingData();
   std::string filePath;
   nlohmann::json jsonData;
+  nlohmann::json assetJsonData;
 };
