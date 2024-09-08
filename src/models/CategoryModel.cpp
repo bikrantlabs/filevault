@@ -176,6 +176,12 @@ bool CategoryModel::addAssetsToCategory(std::vector<AssetModel> assets,
   if (!assetJsonData.contains("assets")) {
     assetJsonData["assets"] = nlohmann::json::array();
   }
+  // Load existing json data
+  auto metadataPath = destinationPath + "/" + "metadata.json";
+  FileUtils::readJsonFromFile(metadataPath, assetJsonData);
+  if (!assetJsonData.contains("assets")) {
+    assetJsonData["assets"] = nlohmann::json::array();
+  }
   // Process and move files
   for (auto &asset : assets) {
     try {
@@ -191,6 +197,7 @@ bool CategoryModel::addAssetsToCategory(std::vector<AssetModel> assets,
       sourceFile->remove();
 
       // Update asset file path
+      asset.filePath = destinationPath + "/" + asset.name;
       asset.filePath = destinationPath + "/" + asset.name;
 
       // Asset is being moved to trash folder
