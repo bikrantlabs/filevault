@@ -1,27 +1,8 @@
-// #pragma once
-// #include <string>
 
-// class Asset {
-// public:
-//   Asset(const std::string &name, const std::string &path,
-//         const std::string &type);
-
-//   const std::string &getName() const;
-//   const std::string &getPath() const;
-//   const std::string &getType() const;
-
-//   void setName(const std::string &name);
-//   void setPath(const std::string &path);
-//   void setType(const std::string &type);
-
-// private:
-//   std::string name;
-//   std::string path;
-//   std::string type;
-// };
 #pragma once
 #include "giomm/file.h"
 #include "glibmm/refptr.h"
+#include "json.hpp"
 #include <optional>
 #include <string>
 #include <vector>
@@ -43,6 +24,7 @@ public:
   bool addAsset(std::string categoryId);
 
   bool updateName(const std::string &name);
+  nlohmann::json toJson();
 
   std::string id;
   std::string name;
@@ -50,10 +32,10 @@ public:
   std::string size;
   bool isTrashed;
   std::string type;
-  std::string filepath;
+  std::string filePath;
   std::string createdAt;
   std::vector<std::string> tags;
-
+  nlohmann::json assetJsonData;
   // Private constructors
 };
 // auto asset = AssetModel(File);
