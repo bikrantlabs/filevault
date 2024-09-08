@@ -38,8 +38,13 @@ void CategoryModel::addCategory(CategoryMetadata categoryMetadata) {
   writeToFile();
   signalCategoryAdded.emit();
 }
-
+void CategoryModel::updateRootPath(std::string &path) {
+  filePath = path + "/" + "metadata.json";
+  loadExistingData();
+}
 void CategoryModel::loadExistingData() {
+  std::cout << "🟢 [CategoryModel.cpp:43]: " << "Loading existing data from "
+            << filePath << std::endl;
   try {
     FileUtils::readJsonFromFile(filePath, jsonData);
   } catch (const std::exception &e) {

@@ -1,8 +1,10 @@
 #include "CreateVault.hpp"
+#include "CategoryModel.hpp"
 #include "DirectoryDialog.hpp"
 #include "FileUtils.hpp"
 #include "FolderUtils.hpp"
 #include "VaultModel.hpp"
+#include "constants.hpp"
 #include "gtkmm/centerbox.h"
 #include "gtkmm/enums.h"
 #include "json.hpp"
@@ -43,7 +45,8 @@ void CreateVault::onEnterPressed(const Glib::ustring &text) {
           // Save vault data to config.json
           VaultModel vault(vaultName, folderPath);
           nlohmann::json vaultJson = vault.toJson();
-          FileUtils::saveJsonToFile("../config.json", vaultJson);
+          FileUtils::saveJsonToFile(ROOT_CONFIG_PATH, vaultJson);
+          CategoryModel::getInstance().updateRootPath(folderPath);
           input.setText("");
           // Navigate to main screen
           stack.set_visible_child("main");

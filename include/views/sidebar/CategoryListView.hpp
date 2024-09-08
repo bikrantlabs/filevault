@@ -18,7 +18,8 @@ private:
   CenterView *stack;
   Gtk::Label categoryLabel;
   Gtk::Grid buttonContainer;
-  void onCategoryButtonClicked(const std::string categoryId);
+  void onCategoryButtonClicked(Gtk::Button *button,
+                               const std::string categoryName);
   void onCategoryAdded();
   void refreshCategoryList();
 };

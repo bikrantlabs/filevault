@@ -30,6 +30,7 @@ public:
   std::vector<AssetModel> getAssetsByCategory(std::string categoryId);
   bool addAssetsToCategory(std::vector<AssetModel> assets,
                            std::string categoryId);
+  void updateRootPath(std::string &path);
   sigc::signal<void()> signalCategoryAdded;
 
 private:

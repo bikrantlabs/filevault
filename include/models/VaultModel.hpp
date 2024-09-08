@@ -15,7 +15,9 @@ public:
   ~VaultModel();
   // Getters and Setters
   std::string getName() const;
+  std::string getActiveScreen() const;
   void setName(const std::string &name);
+  void setActiveScreen(const std::string &name);
   void loadFromFile(const std::string &filePath);
 
   std::string getPath() const;
@@ -30,4 +32,5 @@ public:
 private:
   std::string name;
   std::string path;
+  std::string activeScreen;
 };

@@ -126,3 +126,4 @@ std::string Utils::formatSize(long long bytes) {
          (bytes >= GB ? "GB"
                       : (bytes >= MB ? "MB" : (bytes >= KB ? "KB" : "B")));
 }
+// std::string Utils::extractActiveScreenId

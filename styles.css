@@ -5,8 +5,8 @@ window {
 
 #sidebar {
   padding: 16px;
-  border-right: 1px solid rgb(89, 89, 89);
-  background-color: #404040;
+  border-right: 1px solid rgb(37, 41, 52);
+  background-color: rgb(32, 36, 47);
   color: white;
 }
 
@@ -41,7 +41,7 @@ window {
 }
 
 #category-btn:hover {
-  background-color: rgb(104, 104, 104);
+  background-color: rgb(54, 58, 69);
   cursor: pointer;
 }
 
@@ -67,4 +67,9 @@ window {
   padding-bottom: 32px;
   padding-left: 132px;
   padding-right: 132px;
+}
+
+#category-btn.active-category {
+  background-color: rgb(54, 58, 69);
+  color: white;
 }
