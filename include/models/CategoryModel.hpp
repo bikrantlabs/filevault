@@ -9,8 +9,8 @@
 typedef struct CategoryMetadata {
   std::string id;
   std::string name;
-  bool passwordLocked;
   std::string password;
+  bool passwordLocked;
   int noOfFiles;
 } CategoryMetadata;
 
@@ -31,6 +31,7 @@ public:
   bool addAssetsToCategory(std::vector<AssetModel> assets,
                            std::string categoryId);
   void updateRootPath(std::string &path);
+  void createDefaultCategories(std::string &path);
   sigc::signal<void()> signalCategoryAdded;
 
 private:

@@ -40,13 +40,15 @@ void CreateVault::onEnterPressed(const Glib::ustring &text) {
         std::string folderPath = path + "/" + vaultName;
         try {
           // Create Vault Folder
-          FolderUtils::createFolder(path + vaultName);
+          FolderUtils::createFolder(folderPath);
 
           // Save vault data to config.json
           VaultModel vault(vaultName, folderPath);
           nlohmann::json vaultJson = vault.toJson();
           FileUtils::saveJsonToFile(ROOT_CONFIG_PATH, vaultJson);
+
           CategoryModel::getInstance().updateRootPath(folderPath);
+          CategoryModel::getInstance().createDefaultCategories(folderPath);
           input.setText("");
           // Navigate to main screen
           stack.set_visible_child("main");

@@ -8,9 +8,10 @@
 const std::string CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 const std::string ROOT_CONFIG_PATH = "../config.json";
 const std::set<std::string> RESERVED_FILENAMES = {
-    "CON",  "PRN",  "AUX",  "NUL",  "COM1", "COM2", "COM3", "COM4",
-    "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3",
-    "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9", ".",    ".."};
+    "CON",  "PRN",  "AUX",  "NUL",   "COM1",     "COM2",          "COM3",
+    "COM4", "COM5", "COM6", "COM7",  "COM8",     "COM9",          "LPT1",
+    "LPT2", "LPT3", "LPT4", "LPT5",  "LPT6",     "LPT7",          "LPT8",
+    "LPT9", ".",    "..",   "Trash", "Untagged", "Uncategorized", "All files"};
 // Define forbidden characters for all OS
 const std::vector<char> FORBIDDEN_CHARS = {'/',  '<', '>', ':', '"',
                                            '\\', '|', '?', '*'};

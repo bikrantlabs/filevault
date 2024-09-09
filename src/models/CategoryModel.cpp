@@ -4,6 +4,7 @@
  */
 #include "CategoryModel.hpp"
 #include "FileUtils.hpp"
+#include "FolderUtils.hpp"
 #include "VaultModel.hpp"
 #include "constants.hpp"
 #include "giomm/error.h"
@@ -221,5 +222,26 @@ bool CategoryModel::addAssetsToCategory(std::vector<AssetModel> assets,
   // TODO: Move the file from assets[i].filepath to our filePath
   return true;
 }
+void CategoryModel::createDefaultCategories(std::string &path) {
 
+  std::vector<CategoryMetadata> defaultCategories = {
+      {"all", "All files", "", false},
+      {"uncategorized", "Uncategorized", "", false},
+      {"untagged", "Untagged", "", false},
+      {"trash", "Trash", "", false},
+  };
+  nlohmann::json categoriesJson = nlohmann::json::array();
+  for (const auto &category : defaultCategories) {
+
+    FolderUtils::createFolder(path + "/" + category.id);
+
+    nlohmann::json categoryJson = {{"id", category.id},
+                                   {"name", category.name},
+                                   {"password", ""},
+                                   {"passwordLocked", false}};
+
+    categoriesJson.push_back(categoryJson);
+  }
+  FileUtils::saveJsonToFile(path + "/" + "metadata.json", categoriesJson);
+}
 CategoryModel::~CategoryModel() {}

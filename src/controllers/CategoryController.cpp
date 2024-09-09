@@ -22,14 +22,13 @@ void CategoryController::onAddCategory(const std::string &categoryName,
 
     // Add created category data to root metadata.json
     std::string uniqueId = Utils::generateId();
-    CategoryMetadata categoryMetadata = {uniqueId, categoryName, true,
-                                         "password1234"};
+    CategoryMetadata categoryMetadata = {uniqueId, categoryName, "", false};
     categoryModel.addCategory(categoryMetadata);
 
     // Create an empty metadatsa.json insdie that  category
-    std::filesystem::path _metadata =
+    std::filesystem::path _metadataPath =
         std::filesystem::path(vault.getPath()) / categoryName / "metadata.json";
-    FileUtils::saveJsonToFile(_metadata, nlohmann::json::object());
+    FileUtils::saveJsonToFile(_metadataPath, nlohmann::json::object());
   } catch (const std::exception &e) {
     // TODO: Show error notification
     std::cerr << "Error: " << e.what() << std::endl;
