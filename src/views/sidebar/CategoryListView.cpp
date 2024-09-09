@@ -77,8 +77,8 @@ void CategoryListView::renderDefaultCategories() {
     categoryButton->set_valign(Gtk::Align::CENTER);
     categoryButton->signal_clicked().connect(
         [this, category, categoryButton]() {
-          onCategoryButtonClicked(categoryButton,
-                                  category.name); // Pass the category ID
+          onCategoryButtonClicked(categoryButton, category.name,
+                                  category.id); // Pass the category ID
         });
     categoryButton->set_name("category-btn");
 
@@ -140,8 +140,8 @@ void CategoryListView::refreshCategoryList() {
     categoryButton->set_valign(Gtk::Align::CENTER);
     categoryButton->signal_clicked().connect(
         [this, category, categoryButton]() {
-          onCategoryButtonClicked(categoryButton,
-                                  category.name); // Pass the category ID
+          onCategoryButtonClicked(categoryButton, category.name,
+                                  category.id); // Pass the category ID
         });
     categoryButton->set_name("category-btn");
 
@@ -157,13 +157,14 @@ void CategoryListView::refreshCategoryList() {
 }
 
 void CategoryListView::onCategoryButtonClicked(Gtk::Button *button,
-                                               const std::string categoryName) {
+                                               const std::string categoryName,
+                                               const std::string categoryId) {
   // TODO: Navigate to that category screen
   // Create or load the category-specific screen in the stack
   std::string screenName = categoryName;
   if (!stack->get_child_by_name(screenName)) {
     auto categoryView =
-        Gtk::make_managed<CategoryView>(parentWindow, categoryName);
+        Gtk::make_managed<CategoryView>(parentWindow, categoryId);
     stack->add(*categoryView, screenName, "Category");
   }
   // TODO: add active screen in config.json
@@ -185,6 +186,7 @@ void CategoryListView::onCategoryButtonClicked(Gtk::Button *button,
   } else {
     button->remove_css_class("active-category");
   }
+
   // Switch to the corresponding category screen
   stack->set_visible_child(screenName);
 }

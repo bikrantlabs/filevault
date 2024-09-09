@@ -25,7 +25,8 @@ private:
   Gtk::Grid buttonContainer;
   Gtk::Grid defaultCategoriesContainer;
   void onCategoryButtonClicked(Gtk::Button *button,
-                               const std::string categoryName);
+                               const std::string categoryName,
+                               const std::string categoryId);
   void onCategoryAdded();
   void refreshCategoryList();
   void renderDefaultCategories();

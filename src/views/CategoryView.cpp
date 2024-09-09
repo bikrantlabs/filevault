@@ -1,4 +1,5 @@
 #include "CategoryView.hpp"
+#include "AssetGalleryView.hpp"
 #include "CategoryModel.hpp"
 #include "FileUtils.hpp"
 #include "giomm/liststore.h"
@@ -16,51 +17,51 @@ CategoryView::CategoryView(Gtk::Window &parentWindow,
       categoryViewLabel(categoryId), categoryId(categoryId) {
   set_name("category-view");
 
-  /**
-  TODO: fetch all assets under this categoryId
-
-  auto assets = categoryModel.getAssets(categoryId);
-
-  if(assets.empty()){
-  //  TODO: Show empty state
-  } else {
-    assets[0].
+  CategoryModel &categoryModel = CategoryModel::getInstance();
+  auto assets = categoryModel.getAssetsByCategory(categoryId);
+  for (auto &asset : assets) {
+    std::cout << "🟢 [CategoryView.cpp:22]: " << "Asset:" << asset.name
+              << std::endl;
   }
-   */
-  // If not files in the category, render the empty state
-  auto lockIcon = Gtk::make_managed<Gtk::Image>("../assets/upload-icon.png");
-  lockIcon->set_pixel_size(132);
-
-  Gtk::Label label(categoryId);
-  Gtk::Label label2("Start by uploading some files!");
-  label.add_css_class("muted-label");
-  label2.add_css_class("muted-label");
-  label.set_margin_top(20);
-
   browseFilesButton.set_cursor("pointer");
-
   browseFilesButton.set_hexpand(false);
   browseFilesButton.set_size_request(10, -1);
   browseFilesButton.set_vexpand(false);
   browseFilesButton.signal_clicked().connect(
       sigc::mem_fun(*this, &CategoryView::onBrowseFilesButtonClicked));
+  if (assets.empty()) {
 
-  emptyWrapperBox.attach(*lockIcon, 0, 0, 1, 1);
-  emptyWrapperBox.attach(label, 0, 1, 1, 1);
-  emptyWrapperBox.attach(label2, 0, 2, 1, 1);
-  emptyWrapperBox.attach(browseFilesButton, 0, 3, 1, 1);
+    auto lockIcon = Gtk::make_managed<Gtk::Image>("../assets/upload-icon.png");
+    lockIcon->set_pixel_size(132);
 
-  emptyWrapperBox.set_column_homogeneous(false);
-  emptyWrapperBox.set_row_homogeneous(false);
-  emptyWrapperBox.set_row_spacing(8);
-  emptyWrapperBox.set_hexpand();
-  emptyWrapperBox.set_vexpand();
-  emptyWrapperBox.set_halign(Gtk::Align::CENTER);
-  emptyWrapperBox.set_valign(Gtk::Align::CENTER);
+    Gtk::Label label(categoryId);
+    Gtk::Label label2("Start by uploading some files!");
+    label.add_css_class("muted-label");
+    label2.add_css_class("muted-label");
+    label.set_margin_top(20);
 
-  // emptyWrapperBox.set_name("empty-wrapper-box");
+    emptyWrapperBox.attach(*lockIcon, 0, 0, 1, 1);
+    emptyWrapperBox.attach(label, 0, 1, 1, 1);
+    emptyWrapperBox.attach(label2, 0, 2, 1, 1);
+    emptyWrapperBox.attach(browseFilesButton, 0, 3, 1, 1);
 
-  append(emptyWrapperBox);
+    emptyWrapperBox.set_column_homogeneous(false);
+    emptyWrapperBox.set_row_homogeneous(false);
+    emptyWrapperBox.set_row_spacing(8);
+    emptyWrapperBox.set_hexpand();
+    emptyWrapperBox.set_vexpand();
+    emptyWrapperBox.set_halign(Gtk::Align::CENTER);
+    emptyWrapperBox.set_valign(Gtk::Align::CENTER);
+
+    // emptyWrapperBox.set_name("empty-wrapper-box");
+
+    append(emptyWrapperBox);
+  } else {
+    // Create and append GalleryView when assets are present
+    auto assetGalleryView = Gtk::make_managed<AssetGalleryView>(assets);
+    append(*assetGalleryView);
+    append(browseFilesButton);
+  }
 
   set_vexpand();
   set_hexpand();
