@@ -2,13 +2,15 @@
 #include "CategoryController.hpp"
 #include "CategoryListView.hpp"
 #include "CenterView.hpp"
+#include "CreateVault.hpp"
 #include "input.hpp"
 #include <iostream>
 void onIconButtonClick() { std::cout << "Clicked~"; }
-SidebarView::SidebarView(Gtk::Window &parentWindow, CenterView *stack)
-    : parentWindow(parentWindow),
+SidebarView::SidebarView(Gtk::Window &parentWindow, CenterView *stack,
+                         CreateVault &createVaultView)
+    : parentWindow(parentWindow), createVaultView(createVaultView),
       addCategoryBtn("../assets/folder-plus.png", onIconButtonClick),
-      categoryInput(), categoryList(parentWindow, stack) {
+      categoryInput(), categoryList(parentWindow, stack, createVaultView) {
   categoryInput.disableSpecialCharacters();
 
   attach(primaryActionButtonGrid, 0, 0, 1, 1);

@@ -22,7 +22,8 @@ void CategoryController::onAddCategory(const std::string &categoryName,
 
     // Add created category data to root metadata.json
     std::string uniqueId = Utils::generateId();
-    CategoryMetadata categoryMetadata = {uniqueId, categoryName, "", false};
+    CategoryMetadata categoryMetadata = {uniqueId, categoryName,
+                                         "../assets/folder.png", "", false};
     categoryModel.addCategory(categoryMetadata);
 
     // Create an empty metadatsa.json insdie that  category

@@ -3,12 +3,14 @@
 #include "AssetModel.hpp"
 #include "json.hpp"
 #include "sigc++/signal.h"
+#include <optional>
 #include <string>
 #include <vector>
 
 typedef struct CategoryMetadata {
   std::string id;
   std::string name;
+  std::string iconPath;
   std::string password;
   bool passwordLocked;
   int noOfFiles;
@@ -25,7 +27,7 @@ public:
   void addCategory(CategoryMetadata categoryMetadata);
   CategoryMetadata getCategoryById(std::string id);
   std::vector<CategoryMetadata> getAllCategories();
-
+  std::vector<CategoryMetadata> getDefaultCategories();
   //
   std::vector<AssetModel> getAssetsByCategory(std::string categoryId);
   bool addAssetsToCategory(std::vector<AssetModel> assets,

@@ -16,6 +16,7 @@ public:
                            const std::string &vaultName,
                            const std::string &vaultPath);
   void onEnterPressed(const Glib::ustring &text);
+  sigc::signal<void()> signalVaultCreated;
   // TODO: Implement initialize required metadata.jsons
   void initializeMetadatas();
 

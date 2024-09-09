@@ -13,8 +13,6 @@
 #include <iostream>
 #include <string>
 CategoryModel::CategoryModel() {
-  std::cout << "🟢 [CategoryModel.cpp:13]: " << "CategoryModel Constructed"
-            << std::endl;
   VaultModel vaultModel(ROOT_CONFIG_PATH);
   filePath = vaultModel.getPath() + "/" + "metadata.json";
 
@@ -30,12 +28,9 @@ void CategoryModel::addCategory(CategoryMetadata categoryMetadata) {
   category["name"] = categoryMetadata.name;
   category["passwordLocked"] = categoryMetadata.passwordLocked;
   category["password"] = categoryMetadata.password;
+  category["iconPath"] = categoryMetadata.iconPath;
 
   jsonData["categories"].push_back(category);
-  for (const auto &category : jsonData["categories"]) {
-    std::cout << "🟢 [CategoryModel.cpp:31]: " << "Name: "
-              << category.value("name", "") << std::endl;
-  }
   writeToFile();
   signalCategoryAdded.emit();
 }
@@ -70,14 +65,12 @@ std::vector<CategoryMetadata> CategoryModel::getAllCategories() {
     // std::cout << "🟢 [CategoryModel.cpp:56]: " << "Getting all categories"
     //           << std::endl;
     for (const auto &category : jsonData["categories"]) {
-      std::cout << "🟢 [CategoryModel.cpp:59]: " << "Getting all categories: "
-                << category.value("id", "") << std::endl;
       CategoryMetadata metadata;
       metadata.id = category.value("id", "");
       metadata.name = category.value("name", "");
       metadata.passwordLocked = category.value("passwordLocked", false);
       metadata.password = category.value("password", "");
-
+      metadata.iconPath = category.value("iconPath", "");
       categories.push_back(metadata);
     }
   } else {
@@ -86,6 +79,32 @@ std::vector<CategoryMetadata> CategoryModel::getAllCategories() {
   }
 
   return categories;
+}
+std::vector<CategoryMetadata> CategoryModel::getDefaultCategories() {
+  std::vector<CategoryMetadata> defaultCategories;
+  loadExistingData();
+  // Check if "defaultCategories" key exists and is an array
+  if (jsonData.find("defaultCategories") != jsonData.end() &&
+      jsonData["defaultCategories"].is_array()) {
+    // std::cout << "🟢 [CategoryModel.cpp:56]: " << "Getting all
+    // defaultCategories"
+    //           << std::endl;
+    for (const auto &category : jsonData["defaultCategories"]) {
+      CategoryMetadata metadata;
+      metadata.id = category.value("id", "");
+      metadata.name = category.value("name", "");
+      metadata.passwordLocked = category.value("passwordLocked", false);
+      metadata.password = category.value("password", "");
+      metadata.iconPath = category.value("iconPath", "");
+
+      defaultCategories.push_back(metadata);
+    }
+  } else {
+    std::cerr << "🔴 [CategoryModel.cpp:73]: "
+              << "defaultCategories not available!!" << std::endl;
+  }
+
+  return defaultCategories;
 }
 
 std::vector<AssetModel>
@@ -118,16 +137,22 @@ CategoryModel::getAssetsByCategory(std::string categoryId) {
   }
   // Load all files inside category.name and build AssetModel each by each, use
   // Gio::File to read all files
+  // We don't want to return Gio::File, instead we want to do:
+  // asset = AssetModel(file) and the constructor will create everything for us
+  // Also, setup counter for no of files read.
 }
 bool CategoryModel::addAssetsToCategory(std::vector<AssetModel> assets,
                                         std::string categoryId) {
-  std::cout << "🟢 [CategoryModel.cpp:118]: " << "Adding assets to category: "
-            << categoryId << std::endl;
   auto categories = this->getAllCategories();
+  auto defaultCategories = this->getDefaultCategories();
+  categories.insert(categories.end(), defaultCategories.begin(),
+                    defaultCategories.end());
   CategoryMetadata category;
 
   // Find the category with the id
   for (int i = 0; i < categories.size(); i++) {
+    std::cout << "🟢 [CategoryModel.cpp:151]: " << "Categories: "
+              << categories[i].name << std::endl;
     if (categories[i].id == categoryId) {
       category = categories[i];
       break;
@@ -140,8 +165,6 @@ bool CategoryModel::addAssetsToCategory(std::vector<AssetModel> assets,
     // Category isn't valid, return null
   }
 
-  std::cout << "🟢 [CategoryModel.cpp:135]: " << "Found category: "
-            << category.name << std::endl;
   VaultModel vaultModel(ROOT_CONFIG_PATH);
 
   // Build the filepath from category.name and vaultdata
@@ -189,7 +212,9 @@ bool CategoryModel::addAssetsToCategory(std::vector<AssetModel> assets,
       auto sourceFile = Gio::File::create_for_path(asset.filePath);
       auto destinationFile =
           Gio::File::create_for_path(destinationPath + "/" + asset.name);
-
+      std::cout << "🟢 [CategoryModel.cpp:210]: "
+                << "Adding asset to destination:" << destinationPath
+                << std::endl;
       // Copy the file to the new location
       sourceFile->copy(destinationFile, Gio::File::CopyFlags::NONE);
 
@@ -204,6 +229,7 @@ bool CategoryModel::addAssetsToCategory(std::vector<AssetModel> assets,
       if (category.name == "trash") {
         asset.isTrashed = true;
       }
+
       // Get data from asset model as json
       auto assetJson = asset.toJson();
 
@@ -212,6 +238,7 @@ bool CategoryModel::addAssetsToCategory(std::vector<AssetModel> assets,
 
       // Save json to metadata.json file
       FileUtils::saveJsonToFile(metadataPath, assetJsonData);
+
     } catch (const Glib::Error &e) {
       // Handle error, such as file not found, permission issues, etc.
       std::cerr << "Error moving file: " << e.what() << std::endl;
@@ -225,23 +252,29 @@ bool CategoryModel::addAssetsToCategory(std::vector<AssetModel> assets,
 void CategoryModel::createDefaultCategories(std::string &path) {
 
   std::vector<CategoryMetadata> defaultCategories = {
-      {"all", "All files", "", false},
-      {"uncategorized", "Uncategorized", "", false},
-      {"untagged", "Untagged", "", false},
-      {"trash", "Trash", "", false},
+      {"all", "All files", "../assets/box.png", "", false},
+      {"uncategorized", "Uncategorized", "../assets/file-question.png", "",
+       false},
+      {"untagged", "Untagged", "../assets/square-x.png", "", false},
+      {"trash", "Trash", "../assets/trash-2.png", "", false},
   };
-  nlohmann::json categoriesJson = nlohmann::json::array();
+  nlohmann::json categoriesJson;
+  categoriesJson["defaultCategories"] = nlohmann::json::array();
   for (const auto &category : defaultCategories) {
 
-    FolderUtils::createFolder(path + "/" + category.id);
+    FolderUtils::createFolder(path + "/" + category.name);
 
     nlohmann::json categoryJson = {{"id", category.id},
                                    {"name", category.name},
+                                   {"iconPath", category.iconPath},
                                    {"password", ""},
                                    {"passwordLocked", false}};
 
-    categoriesJson.push_back(categoryJson);
+    categoriesJson["defaultCategories"].push_back(categoryJson);
   }
   FileUtils::saveJsonToFile(path + "/" + "metadata.json", categoriesJson);
+  loadExistingData();
+  std::cout << "🟢 [CategoryModel.cpp:248]: "
+            << "Saved default files metadata.json" << std::endl;
 }
 CategoryModel::~CategoryModel() {}

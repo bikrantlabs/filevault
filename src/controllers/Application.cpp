@@ -22,7 +22,8 @@ void Application::on_activate() {
   auto categoryView = Gtk::make_managed<CategoryView>(*mainWindow, "all");
   // Create the login and main screens as parts of the stack
   auto createVaultScreen = Gtk::manage(new CreateVault(*stack, *mainWindow));
-  auto mainScreen = Gtk::manage(new MainScreen(*mainWindow, categoryView));
+  auto mainScreen = Gtk::manage(
+      new MainScreen(*mainWindow, categoryView, *createVaultScreen));
   mainScreen->set_size_request(1280, -1);
   mainScreen->set_name("main-screen");
 
@@ -30,8 +31,6 @@ void Application::on_activate() {
   stack->add(*mainScreen, "main", "Main");
 
   VaultModel vault("../config.json");
-  std::cout << "Vault Path:===" << vault.getPath() << std::endl;
-  std::cout << "Vault Path:===" << vault.getName() << std::endl;
   if (vault.getName().empty()) {
     stack->set_visible_child("createVaultScreen"); // Show login screen
   } else {

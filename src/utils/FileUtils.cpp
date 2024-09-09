@@ -76,7 +76,11 @@ bool FileUtils::saveJsonToFile(const std::string &filePath,
                              " for writing.");
   }
 }
-
+/**
+ * Instead of throwing error, we just return false
+ * In case file does not exist, we don't want the program to break
+ * Just the second arg `jsonData` will be null.
+ */
 bool FileUtils::readJsonFromFile(const std::string &filePath,
                                  nlohmann::json &jsonData) {
   std::ifstream file(filePath);
@@ -87,13 +91,10 @@ bool FileUtils::readJsonFromFile(const std::string &filePath,
       return true;
     } catch (const std::exception &e) {
       file.close();
-      throw std::runtime_error(
-          "An error occurred while reading JSON from file: " + filePath +
-          ". Error: " + e.what());
+      return false;
     }
   } else {
-    throw std::runtime_error("Failed to open file: " + filePath +
-                             " for reading.");
+    return true;
   }
   return false;
 }

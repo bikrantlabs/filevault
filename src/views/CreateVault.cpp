@@ -51,6 +51,7 @@ void CreateVault::onEnterPressed(const Glib::ustring &text) {
           CategoryModel::getInstance().createDefaultCategories(folderPath);
           input.setText("");
           // Navigate to main screen
+          signalVaultCreated.emit();
           stack.set_visible_child("main");
         } catch (const std::exception &e) {
           std::cerr << "🛑[CreateVault.cpp:42] Error : " << e.what()

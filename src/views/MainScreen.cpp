@@ -4,8 +4,10 @@
 #include "gtkmm/object.h"
 #include <gtkmm/box.h>
 
-MainScreen::MainScreen(Gtk::Window &parentWindow, CategoryView *categoryView)
-    : parentWindow(parentWindow), sidebar(parentWindow, &centerBox),
+MainScreen::MainScreen(Gtk::Window &parentWindow, CategoryView *categoryView,
+                       CreateVault &createVaultView)
+    : parentWindow(parentWindow), createVaultView(createVaultView),
+      sidebar(parentWindow, &centerBox, createVaultView),
       centerBox(parentWindow, categoryView), rightbar() {
 
   parent.set_orientation(Gtk::Orientation::HORIZONTAL);

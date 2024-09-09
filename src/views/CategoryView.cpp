@@ -8,7 +8,6 @@
 #include "gtkmm/filedialog.h"
 #include "gtkmm/image.h"
 #include "gtkmm/label.h"
-#include "utils.hpp"
 #include <iostream>
 #include <vector>
 CategoryView::CategoryView(Gtk::Window &parentWindow,
@@ -32,7 +31,7 @@ CategoryView::CategoryView(Gtk::Window &parentWindow,
   auto lockIcon = Gtk::make_managed<Gtk::Image>("../assets/upload-icon.png");
   lockIcon->set_pixel_size(132);
 
-  Gtk::Label label("This category is empty.");
+  Gtk::Label label(categoryId);
   Gtk::Label label2("Start by uploading some files!");
   label.add_css_class("muted-label");
   label2.add_css_class("muted-label");
@@ -90,21 +89,13 @@ void CategoryView::onBrowseFilesFinish(
     const Glib::RefPtr<Gio::AsyncResult> &result,
     const Glib::RefPtr<Gtk::FileDialog> &dialog) {
 
-  // TODO: Let CategoryModel to upload files
-  // std::vector<Glib::RefPtr<Gio::File>>
-
   try {
     CategoryModel &categoryModel = CategoryModel::getInstance();
     auto files = dialog->open_multiple_finish(result);
 
-    // Notice that this is a std::string, not a Glib::ustring.
     auto assets = FileUtils::convertFilesToAssetModels(files);
     categoryModel.addAssetsToCategory(assets, categoryId);
-    // for (const auto &file : files) {
-    //   auto fileInfo = file->query_info();
-    //   size_t lastDotPos = fileInfo->get_name().find_last_of(".");
-    //   std::cout << "File selected: " << file->get_path() << std::endl;
-    // }
+
   } catch (const Gtk::DialogError &err) {
     // Can be thrown by dialog->open_finish(result).
     std::cout << "No file selected. " << err.what() << std::endl;

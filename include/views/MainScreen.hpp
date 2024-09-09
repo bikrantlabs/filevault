@@ -7,7 +7,8 @@
 
 class MainScreen : public Gtk::Box {
 public:
-  MainScreen(Gtk::Window &parentWindow, CategoryView *categoryView);
+  MainScreen(Gtk::Window &parentWindow, CategoryView *categoryView,
+             CreateVault &createVaultView);
   ~MainScreen() override;
 
 protected:
@@ -22,6 +23,7 @@ protected:
 
   // Other views/windows/models passed
   Gtk::Window &parentWindow;
+  CreateVault &createVaultView;
 
   // UI components
   Gtk::Box parent;
