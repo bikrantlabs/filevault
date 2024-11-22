@@ -109,37 +109,51 @@ std::vector<CategoryMetadata> CategoryModel::getDefaultCategories() {
 
 std::vector<AssetModel>
 CategoryModel::getAssetsByCategory(std::string categoryId) {
-  // TODO: Add proper returns
+  std::vector<AssetModel> assets;
   auto categories = this->getAllCategories();
+  auto defaultCategories = this->getDefaultCategories();
+  categories.insert(categories.end(), defaultCategories.begin(),
+                    defaultCategories.end());
   CategoryMetadata category;
 
-  // Find the category with the id
-  for (int i = 0; i < categories.size(); i++) {
-    if (categories[i].id == categoryId) {
-      category = categories[i];
+  // Find the category with the given ID
+  for (const auto &cat : categories) {
+    if (cat.id == categoryId) {
+      category = cat;
       break;
     }
   }
 
   if (category.id.empty()) {
-    // Category isn't valid, return null
+    // Category isn't valid, return empty vector or handle error as needed
+    std::cerr << "🔴 Category with ID " << categoryId << " not found!"
+              << std::endl;
+    return assets;
   }
+
   VaultModel vaultModel(ROOT_CONFIG_PATH);
 
-  // Build the filepath from category.name and vaultdata
+  // Build the filepath from category.name and vault data
   std::string categoryPath = vaultModel.getPath() + "/" + category.name;
-  std::vector<AssetModel> assets;
+
   try {
     auto folder = Gio::File::create_for_path(categoryPath);
     auto enumerator =
         folder->enumerate_children("*", Gio::FileQueryInfoFlags::NONE);
-  } catch (...) {
+
+    while (auto fileInfo = enumerator->next_file()) {
+      auto file = folder->get_child(fileInfo->get_name());
+
+      // Create an AssetModel instance from the file and add to the vector
+      assets.emplace_back(file);
+    }
+  } catch (const std::exception &e) {
+    std::cerr << "🔴 Error while reading assets from category: " << e.what()
+              << std::endl;
+    // Handle any exceptions appropriately
   }
-  // Load all files inside category.name and build AssetModel each by each, use
-  // Gio::File to read all files
-  // We don't want to return Gio::File, instead we want to do:
-  // asset = AssetModel(file) and the constructor will create everything for us
-  // Also, setup counter for no of files read.
+
+  return assets;
 }
 bool CategoryModel::addAssetsToCategory(std::vector<AssetModel> assets,
                                         std::string categoryId) {

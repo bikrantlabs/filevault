@@ -1,9 +1,3 @@
-#include "Application.hpp"
-
-int main(int argc, char *argv[]) {
-  auto app = std::make_unique<Application>();
-  return app->run(argc, argv);
-}
 /* gtkmm example Copyright (C) 2014 gtkmm development team
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,12 +14,32 @@ int main(int argc, char *argv[]) {
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-// #include "examplewindow.hpp"
-// #include <gtkmm/application.h>
+#ifndef GTKMM_EXAMPLEWINDOW_H
+#define GTKMM_EXAMPLEWINDOW_H
 
-// int main(int argc, char *argv[]) {
-//   auto app = Gtk::Application::create("org.gtkmm.example.flowbox");
+#include <gtkmm.h>
 
-//   // Shows the window and returns when it is closed.
-//   return app->make_window_and_run<ExampleWindow>(argc, argv);
-// }
+#include <vector>
+
+class ExampleWindow : public Gtk::Window {
+public:
+  ExampleWindow();
+  virtual ~ExampleWindow();
+
+protected:
+  // Draw function
+  void on_drawing_area_draw(const Cairo::RefPtr<Cairo::Context> &cr, int width,
+                            int height, int swatch_i);
+
+  // Containers
+  Gtk::ScrolledWindow m_scrolled_window;
+  Gtk::FlowBox m_flow_box;
+
+private:
+  void fill_color_names();
+  Gtk::Button *create_color_swatch(int swatch_i);
+
+  std::vector<Glib::ustring> m_color_names;
+};
+
+#endif // GTKMM_EXAMPLEWINDOW_H

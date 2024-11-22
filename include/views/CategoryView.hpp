@@ -1,5 +1,6 @@
 #pragma once
 
+#include "AssetGalleryView.hpp"
 #include "gtkmm/box.h"
 #include "gtkmm/button.h"
 #include "gtkmm/filedialog.h"

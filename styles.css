@@ -73,3 +73,12 @@ window {
   background-color: rgb(54, 58, 69);
   color: white;
 }
+
+#gallery-item {
+  /* background-color: red; */
+  /* border: 1px solid aqua; */
+}
+
+#gallery-item-wrapper {
+  border: 1px solid red;
+}
